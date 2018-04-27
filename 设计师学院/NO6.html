@@ -1,159 +1,312 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<meta charset="UTF-8">
-		<title>No.6 - 利用 CSS animation 制作一个炫酷的 Slider</title>
-		<style>
-			* {
-				padding: 0;
-				margin: 0;
-			}
-			
-			body,
-			html {
-				height: 100%;
-				background-color: #000;
-			}
-			
-			.container {
-				height: 200px;
-				width: 120px;
-				/*height:100%;*/
-			}
-			
-			.list {
-				position: relative;
-				list-style: none;
-				height: 100%;
-			}
-			
-			.item {
-				position: absolute;
-				text-align: center;
-				height: 100%;
-			}
-			.item1{
-				left:-500px;
-				transition: left 0.5s ease-out; 
-			}
-			.item2{
+<head>
+	<meta charset="UTF-8">
+	<title>No.6 - 利用 CSS animation 制作一个炫酷的 Slider</title>
+	<style>
+		* {
+			padding: 0;
+			margin: 0;
+		}
 
-			}
-			.item3{
+		body,
+		html {
+			height: 100%;
+			background-color: #000;
+		}
 
-			}
-			.item4{
+		.container {
+			height: 100%;
+			overflow: hidden;
+		}
 
-			}
-			.item5{
+		.list {
+			position: relative;
+			list-style: none;
+			height: 100%;
+		}
 
+		.item {
+			position: absolute;
+			top: 0;
+			left: 0;
+			text-align: center;
+			height: 100%;
+			width: 100%
+		}
+		/* 用来让上一个执行动画元素，现在正要执行动画元素下面 */
+		.last {
+			z-index: 1;
+		}
+		/* 
+			z-index让动画元素显示在最上面
+			animation
+		 */
+		.item1 {
+			z-index: 2;
+			-webkit-animation: ani1 0.5s ease-out 1 forwards;
+			animation: ani1 0.5s ease-out 1 forwards;
+		}
+		/* 
+			动画效果，0%的状态到100%的状态
+		 */
+		@-webkit-keyframes ani1 {
+			from {
+				left: -500px;
 			}
-			.item>img {
-				height: 100%;
-				vertical-align: bottom;
+			to {
+				left: 0;
 			}
-			
-			.thumb{
-				list-style: none;
-				width:500px;
-			}
-			.t_item{
-				display: inline-block;
-				width:100px;
-				height:50px;
-				background-color: aqua;
-			}
-			
-			.last,.show {
-				z-index: 1;
-				top:0;
-				left:0;
-				-webkit-transform: scale(1) rotate(0deg);
-				transform: scale(1) rotate(0deg);
-			}
-			
-			.show {
-				z-index: 2;
-			}
-		</style>
-	</head>
+		}
 
-	<body>
-		<div class="container">
-			<ul class="list">
-				<li class="item item1 show"><img src="image/1.jpg" /></li>
-				<li class="item item2"><img src="image/2.jpg" /></li>
-				<li class="item item3"><img src="image/3.jpg" /></li>
-				<li class="item item4"><img src="image/4.jpg" /></li>
-				<li class="item item5"><img src="image/5.jpg" /></li>
-			</ul>
-
-			<ul class="thumb">
-				<li class="t_item" d-index=0>
-					1
-				<li class="t_item" d-index=1>
-					2
-				<li class="t_item" d-index=2>
-					3
-				<li class="t_item" d-index=3>
-					4
-				<li class="t_item" d-index=4>
-					5
-				</li>
-			</ul>
-		</div>
-
-		<script>
-			function $(ele) {
-				return document.querySelectorAll(ele);
+		@keyframes ani1 {
+			from {
+				left: -500px;
 			}
-
-			function hasClass(el, className) {
-				var reg = new RegExp('(^|\\s)' + className + '(\\s|$)')
-				return reg.test(el.className)
+			to {
+				left: 0;
 			}
+		}
 
-			function addClass(el, className) {
-				if(hasClass(el, className)) {
-					return
+		.item2 {
+			z-index: 2;
+			-webkit-animation: ani2 0.5s ease-out 1 forwards;
+			animation: ani2 0.5s ease-out 1 forwards;
+		}
+
+		@-webkit-keyframes ani2 {
+			from {
+				top: 350px;
+			}
+			to {
+				top: 0;
+			}
+		}
+
+		@keyframes ani2 {
+			from {
+				top: 350px;
+			}
+			to {
+				top: 0;
+			}
+		}
+
+		.item3 {
+			z-index: 2;
+			-webkit-animation: ani3 1s ease-in 1 forwards;
+			animation: ani3 1s ease-in 1 forwards;
+		}
+
+		@-webkit-keyframes ani3 {
+			from {
+				-webkit-transform: scale(0.1);
+				transform: scale(0.1);
+			}
+			to {
+				-webkit-transform: scale(1);
+				transform: scale(1);
+			}
+		}
+
+		@keyframes ani3 {
+			from {
+				-webkit-transform: scale(0.1);
+				transform: scale(0.1);
+			}
+			to {
+				-webkit-transform: scale(1);
+				transform: scale(1);
+			}
+		}
+
+		.item4 {
+			z-index: 2;
+			-webkit-animation: ani4 1s ease-out 1 forwards;
+			animation: ani4 1s ease-out 1 forwards;
+		}
+
+		@-webkit-keyframes ani4 {
+			from {
+				-webkit-transform: scale(2);
+				transform: scale(2);
+			}
+			to {
+				-webkit-transform: scale(1);
+				transform: scale(1);
+			}
+		}
+
+		@keyframes ani4 {
+			from {
+				-webkit-transform: scale(2);
+				transform: scale(2);
+			}
+			to {
+				-webkit-transform: scale(1);
+				transform: scale(1);
+			}
+		}
+
+		.item5 {
+			z-index: 2;
+			-webkit-animation: ani5 0.7s ease-in-out 1 forwards;
+			animation: ani5 0.7s ease-in-out 1 forwards;
+		}
+
+		@-webkit-keyframes ani5 {
+			from {
+				-webkit-transform: rotate(-360deg) scale(0.7);
+				transform: rotate(-360deg) scale(0.7);
+			}
+			to {
+				-webkit-transform: rotate(0deg) scale(0);
+				transform: rotate(0deg) scale(0);
+			}
+		}
+
+		@keyframes ani5 {
+			from {
+				-webkit-transform: rotate(-360deg) scale(0.7);
+				transform: rotate(-360deg) scale(0.7);
+			}
+			to {
+				-webkit-transform: rotate(0deg) scale(1);
+				transform: rotate(0deg) scale(1);
+			}
+		}
+		/* display:block;去除img的白边 */
+		img {
+			display: block;
+			height: 100%;
+			width: 100%;
+		}
+
+		.thumb {
+			list-style: none;
+			position: absolute;
+			bottom: 30px;
+			left: 50%;
+			margin-left: -500px;
+			z-index: 10;
+		}
+
+		.t_item {
+			display: inline-block;
+			position: relative;
+			width: 180px;
+			height: 150px;
+			margin: 0 10px;
+			background-color: aqua;
+			cursor: pointer;
+		}
+
+		.t_item::after {
+			content: "";
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			height: 100%;
+			background-color: #000;
+			opacity: 0.5;
+			-webkit-transition: opacity .3s;
+			transition: opacity .3s;
+		}
+
+		.t_item:hover::after {
+			opacity: 0;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<ul class="list">
+			<li class="item ">
+				<img src="image/1.jpg" />
+			</li>
+			<li class="item ">
+				<img src="image/2.jpg" />
+			</li>
+			<li class="item ">
+				<img src="image/3.jpg" />
+			</li>
+			<li class="item ">
+				<img src="image/4.jpg" />
+			</li>
+			<li class="item last">
+				<img src="image/5.jpg" />
+			</li>
+		</ul>
+
+		<ul class="thumb">
+			<!-- 删除结束li的结束标签，去除line-block的间隙 -->
+			<li class="t_item" d-index=0>
+				<img src="image/1.jpg" />
+			<li class="t_item" d-index=1>
+				<img src="image/2.jpg" />
+			<li class="t_item" d-index=2>
+				<img src="image/3.jpg" />
+			<li class="t_item" d-index=3>
+			<img src="image/4.jpg" />
+			<li class="t_item" d-index=4>
+				<img src="image/5.jpg" />
+			</li>
+		</ul>
+	</div>
+
+	<script>
+		function $(ele) {
+			return document.querySelectorAll(ele);
+		}
+
+		function hasClass(el, className) {
+
+
+			var reg = new RegExp('(^|\\s)' + className + '(\\s|$)')
+			return reg.test(el.className)
+		}
+
+		function addClass(el, className) {
+			if (hasClass(el, className)) {
+				return
+			}
+			var newClass = el.className.split(' ')
+			newClass.push(className)
+			el.className = newClass.join(' ')
+		}
+
+		function removeClass(el, className) {
+			if (!hasClass(el, className)) {
+				return
+			}
+			var newClass = el.className.split(' ')
+			for (var i = 0; i < newClass.length; i++) {
+				if (newClass[i] === className) {
+					newClass.splice(i, 1);
 				}
-				var newClass = el.className.split(' ')
-				newClass.push(className)
-				el.className = newClass.join(' ')
 			}
+			el.className = newClass.join(' ');
+		}
+		//每一个元素都是绝对定位，根据z-index来显示最上面的那个。
+		//为了下一个动画元素进行动画的时候下面还是上一次动画的元素，给上一次的动画元素添加last,让它位于仅次于正在动画元素的下面
+		var last = -1;
+		$(".thumb")[0].addEventListener('click', function (e) {
+			var index = parseInt(e.target.getAttribute("d-index"));
+			if (last != -1) {
+				addClass($('.item')[last - 1], 'last');
+				removeClass($('.item')[last - 1], 'item' + (last));
+			}
+			// 点击上次执行完的元素，可以再执行一次动画
+			setTimeout(function () {
+				addClass($('.item')[index], 'item' + (1 + index));
+				last = index + 1;
+			}, 0);
 
-			function removeClass(el, className) {
-				if(!hasClass(el, className)) {
-					return
-				}
-				var newClass = el.className.split(' ')
-				for(var i = 0; i < newClass.length; i++) {
-					if(newClass[i] === className) {
-						newClass.splice(i, 1);
-					}
-				}
-				el.className = newClass.join(' ');
-			}
-			$(".thumb")[0].addEventListener('click',function(e){
-				var index=e.target.getAttribute("d-index");
-				removeClass($(".last")[0],'last');
-				addClass($('.show')[0],'last');
-				addClass($('.item')[0],'show');
-			})
-		</script>
-	</body>
+		})
+	</script>
+</body>
 
 </html>
-
-<!--
-	点击切换图片，有一个入场动画
-	
-	
-	left 0.5 -500 out
-	top 0.5 350	out
-	scale 1.0 0.1	in
-	scale 1.0 2.0	out
-	rotate+scale 0.7 -360deg+0.1 in-out
-	
--->
