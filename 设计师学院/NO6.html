@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>No.6 - 利用 CSS animation 制作一个炫酷的 Slider</title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+			
+			body,
+			html {
+				height: 100%;
+				background-color: #000;
+			}
+			
+			.container {
+				height: 200px;
+				width: 120px;
+				/*height:100%;*/
+			}
+			
+			.list {
+				position: relative;
+				list-style: none;
+				height: 100%;
+			}
+			
+			.item {
+				position: absolute;
+				text-align: center;
+				height: 100%;
+			}
+			.item1{
+				left:-500px;
+				transition: left 0.5s ease-out; 
+			}
+			.item2{
+
+			}
+			.item3{
+
+			}
+			.item4{
+
+			}
+			.item5{
+
+			}
+			.item>img {
+				height: 100%;
+				vertical-align: bottom;
+			}
+			
+			.thumb{
+				list-style: none;
+				width:500px;
+			}
+			.t_item{
+				display: inline-block;
+				width:100px;
+				height:50px;
+				background-color: aqua;
+			}
+			
+			.last,.show {
+				z-index: 1;
+				top:0;
+				left:0;
+				-webkit-transform: scale(1) rotate(0deg);
+				transform: scale(1) rotate(0deg);
+			}
+			
+			.show {
+				z-index: 2;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container">
+			<ul class="list">
+				<li class="item item1 show"><img src="image/1.jpg" /></li>
+				<li class="item item2"><img src="image/2.jpg" /></li>
+				<li class="item item3"><img src="image/3.jpg" /></li>
+				<li class="item item4"><img src="image/4.jpg" /></li>
+				<li class="item item5"><img src="image/5.jpg" /></li>
+			</ul>
+
+			<ul class="thumb">
+				<li class="t_item" d-index=0>
+					1
+				<li class="t_item" d-index=1>
+					2
+				<li class="t_item" d-index=2>
+					3
+				<li class="t_item" d-index=3>
+					4
+				<li class="t_item" d-index=4>
+					5
+				</li>
+			</ul>
+		</div>
+
+		<script>
+			function $(ele) {
+				return document.querySelectorAll(ele);
+			}
+
+			function hasClass(el, className) {
+				var reg = new RegExp('(^|\\s)' + className + '(\\s|$)')
+				return reg.test(el.className)
+			}
+
+			function addClass(el, className) {
+				if(hasClass(el, className)) {
+					return
+				}
+				var newClass = el.className.split(' ')
+				newClass.push(className)
+				el.className = newClass.join(' ')
+			}
+
+			function removeClass(el, className) {
+				if(!hasClass(el, className)) {
+					return
+				}
+				var newClass = el.className.split(' ')
+				for(var i = 0; i < newClass.length; i++) {
+					if(newClass[i] === className) {
+						newClass.splice(i, 1);
+					}
+				}
+				el.className = newClass.join(' ');
+			}
+			$(".thumb")[0].addEventListener('click',function(e){
+				var index=e.target.getAttribute("d-index");
+				removeClass($(".last")[0],'last');
+				addClass($('.show')[0],'last');
+				addClass($('.item')[0],'show');
+			})
+		</script>
+	</body>
+
+</html>
+
+<!--
+	点击切换图片，有一个入场动画
+	
+	
+	left 0.5 -500 out
+	top 0.5 350	out
+	scale 1.0 0.1	in
+	scale 1.0 2.0	out
+	rotate+scale 0.7 -360deg+0.1 in-out
+	
+-->

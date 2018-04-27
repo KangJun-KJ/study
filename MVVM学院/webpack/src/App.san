@@ -1,0 +1,22 @@
+<template>
+    <h1 class='hello'>
+    	hello {{msg}}
+    </h1>
+</template>
+
+<script>
+    export default {
+        initData () {
+            return {
+                msg: 'san'
+            };
+        }
+    }
+</script>
+
+<style>
+    .hello {
+        color: blue;
+        text-align:center;
+    }
+</style>
