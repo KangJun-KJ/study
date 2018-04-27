@@ -65,23 +65,24 @@
         <a info='压缩2倍' data-property='scaleX' data-to='0.5'></a>
         <a info='旋转45°' data-property='rotate' data-to='45deg'></a>
         <a info='x+=10 y+=20' data-property='translate' data-to='10px,20px'></a>
-        <a info='以上所有效果'></a>
+        <a id='all' info='以上所有效果'></a>
     </div>
 
     <script>
         var css = [],
             property, to, value, all = "";
 
-        var prefix = function () {
-            var div = document.createElement('div'),num=['webkit','moz','o','ms'];
-            var str='';
-            num.forEach(function(key){
-                if(div.style[key+'Transform']){
-                    str=key;
-                }
-            })
-            return str;
-        }();
+        
+		var prefix = "",
+			testDiv = document.createElement("div");
+		if("oninput" in testDiv) {
+			["", 'moz','o','ms', "webkit"].forEach(function(pre) {
+				var transform = pre + (pre ? "T" : "t") + "ransform";
+				if(transform in testDiv.style) {
+					prefix ="-"+ pre+"-transform";
+				}
+			});
+		}
         [].slice.call(document.querySelectorAll('a[data-property')).forEach(function (el, i) {
             property = el.getAttribute("data-property");
             to = el.getAttribute("data-to");
@@ -90,13 +91,14 @@
             value = ' ' + property + '(' + to + ')';
             all += value
 
-            css.push('.' + el.className + '{', prefix+'transform: ' + value, '}');
+            css.push('.' + el.className + '{', prefix+': ' + value, '}');
         });
+
+        css.push('#all{', prefix+': ' + all, '}');
+        
         var style = document.createElement('style');
         style.textContent = css.join('\r\n');
         document.head.appendChild(style);
-
-        document.querySelector('a:last-child').style.transform = all;
     </script>
 </body>
 
