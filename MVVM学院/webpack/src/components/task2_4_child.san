@@ -1,0 +1,22 @@
+<template>
+    <div class='child'>
+        子组件：<input type="text" value="{= val =}"> <button on-click='callFaters'>通知父组件</button>
+    </div>
+</template>
+
+<script>
+    export default{
+        initData(){
+            return {
+                val:""
+            }
+        },
+        callFaters(){
+             this.dispatch('input:change', this.data.get("val"));
+        }
+    }
+</script>
+
+<style scoped> 
+   
+</style>

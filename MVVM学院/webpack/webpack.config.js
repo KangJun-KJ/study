@@ -12,7 +12,7 @@ module.exports = {
 			test: /\.js$/,
 			loader: 'babel-loader',
 		}, {
-			test: /\.(png|jpg|gif)$/,
+			test: /\.(png|jpg|gif|svg)$/,
 			use: [{
 				loader: 'file-loader',
 				options: {}
@@ -46,7 +46,7 @@ module.exports = {
 		extensions:['.san','.js','.css'],
 		//模块别名配置，映射模块
 		alias:{
-			'@':path.join(__dirname, '../src')
+			'@':path.join(__dirname, './src')
 		}
 	}
 }

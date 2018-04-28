@@ -1,0 +1,61 @@
+<template>
+    <div class='section'>
+        <h1>2.条件和循环</h1>
+        <button on-click="addData">添加</button>
+         <table>
+            <tr>
+                <th>姓名</th>
+                <th>审核状态</th>
+                <th>操作</th>
+            </tr>
+            <tr s-for="p,index in peoples">
+                <td>{{p.name}}</td>
+                <td>{{p.status | turnStatus}}</td>
+                <td><button on-click='operator(index)'>{{p.status==-1?"审核":"删除"}}</button></td>
+            </tr>
+        </table>
+    </div>
+</template>
+
+<script>
+    export default {
+        initData () {
+            return {
+                peoples:[]
+            };
+        },
+        addData(){
+            this.data.push("peoples",{name:["刘一","陈二","张三","李四","王五","赵六","孙七","周八","吴九","郑十"][this.data.raw.peoples.length%10],status:-1});
+        },
+        operator(index){
+            var data=[].slice.call(this.data.raw.peoples);
+            if(data[index].status===-1){
+                data[index].status=Math.round(Math.random());
+            }else{
+                data.splice(index,1);
+            }
+            this.data.set("peoples",data);
+        },
+        filters:{
+            turnStatus:function(val,format){
+                return ['待审核','不合格','合格'][val+1];
+            }
+        }
+    }
+</script>
+
+<style scoped>
+        .section{
+            width:90%;
+            margin:0 auto;
+        }
+        table{
+            border-collapse:collapse;
+        }
+        td,th{
+            border:1px solid #dfe2e5;
+            min-width: 100px;
+            line-height: 30px;
+            text-align: center
+        }
+</style>
