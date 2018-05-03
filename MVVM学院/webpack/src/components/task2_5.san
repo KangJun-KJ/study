@@ -3,34 +3,96 @@
         <h1>2.5表单实现Input、Checkbox组件</h1>
         <div class='con'>
             <header class='head'>
-                <div>
-                    输入框
+                <div class='h_wrap'>
+                    <span class='h_title'>输入框</span>
+                    <span class='h_fenlei'>
+                        <p>控件</p>
+                        <p>input</p>
+                    </span>
                 </div>
                 <div class='info'>
-                    待补充
+                    定义单行的输入字段，用户可在其中输入文本。默认宽度为 20 个字符。
                 </div>
             </header>
         </div>
-        <san-input  
-            value="{{ value }}"
-            placeholder="{{ placeholder }}"
-            disabled="{{ disabled }}"
-            readonly="{{ readonly }}"
-            on-input="handleInput"
-            on-focus="handleInput2"
-            on-blur="handleInput3"
-            ></san-input>
+
+        <div class='display'>
+            <div class='d_item'>
+                <san-input  
+                    value="{{ value }}"
+                    placeholder="{{ placeholder }}"
+                    disabled="{{ disabled }}"
+                    readonly="{{ readonly }}"
+                    ></san-input>
+                <span>普通的组件</span>
+            </div>
+            <div class='d_item'>
+                <san-input  
+                    value="{{ value }}"
+                    placeholder="{{ placeholder }}"
+                    disabled="{{ !disabled }}"
+                    ></san-input>
+                <span>disabled</span>
+            </div>
+            <div class='d_item'>
+                <san-input  
+                    value="{{ value }}"
+                    placeholder="{{ placeholder }}"
+                    readonly="{{ !readonly }}"
+                    ></san-input>
+                <span>readonly</span>
+            </div>
+            <div class='d_item'>
+                <san-input  
+                    value="{{ value }}"
+                    placeholder="{{ placeholder }}"
+                    disabled="{{ disabled }}"
+                    readonly="{{ readonly }}"
+                    on-input="handleInput"
+                    on-focus="handleInput2"
+                    on-blur="handleInput3"
+                    ></san-input>
+                <span>带事件的组件</span>
+                <p>input状态：{{inputStatus}}</p>
+            </div>
+            <div class='d_item'>
+                <san-input  
+                    value="{{ value }}"
+                    placeholder="{{ placeholder }}"
+                    minlenth=6
+                    on-blur="handleInput4"
+                    ></san-input>
+                <span>带状态的组件</span>
+                <p class='error_status'>{{inputStatus2}}</p>
+            </div>
+        </div>
         
-        <san-checkbox
-            checked="{= checked =}"
-            disabled="{= disabled2 =}"
-            trueValue="{= trueValue =}"
-            falseValue="{= falseValue =}"
-            indeterminate="{= indeterminate =}"
-            on-change="change"
-        >
-            是否开启
-        </san-checkbox>
+        <div class='con'>
+            <header class='head'>
+                <div class='h_wrap'>
+                    <span class='h_title'>复选框</span>
+                    <span class='h_fenlei'>
+                        <p>控件</p>
+                        <p>checkbox</p>
+                    </span>
+                </div>
+                <div class='info'>
+                    复选框(Check Box)用于在两个或者两个以上有清晰差别的选项中进行选择。复选框的标签是对选中状态的描述，而清除状态的含义必须与选中状态明确相反。因此，复选框应该应用于切换选项的开关状态，或者是选择/取消选择一个项目。
+                </div>
+            </header>
+        </div>
+        <div class='display'>
+                <san-checkbox
+                    checked="{= checked =}"
+                    disabled="{= disabled2 =}"
+                    trueValue="{= trueValue =}"
+                    falseValue="{= falseValue =}"
+                    indeterminate="{= indeterminate =}"
+                    on-change="change">
+                    基本用法
+                </san-checkbox>
+            </div>
+        
     </div>
 </template>
 
@@ -44,7 +106,9 @@
         },
         initData () {
             return {
-                value:123,
+                value:"",
+                inputStatus:"正常",
+                inputStatus2:"",
                 placeholder:"静静等待你的输入",
                 disabled:false,
                 readonly:false,
@@ -57,13 +121,22 @@
             };
         },
         handleInput(value){
-            console.log(value);
+            this.data.set("inputStatus","input值改变了=>"+value);
         },
         handleInput2(value){
-           console.log('获得了焦点')
+           this.data.set("inputStatus","获取到了焦点");
         },
         handleInput3(value){
-            console.log('失去了焦点');
+            
+            this.data.set("inputStatus","失去了焦点");
+        },
+        handleInput4(isLegal){
+            if(!isLegal){
+                 this.data.set("inputStatus2","");
+            }else{
+                 this.data.set("inputStatus2","最少长度为6");
+            }
+           
         },
         change(value){
             console.log('checkbox的按钮状态改变了'+value);  
@@ -75,5 +148,53 @@
     .section{
         width:90%;
         margin:0 auto;
+    }
+    .con{
+        margin-top:30px;
+        background-color:rgb(92,92,92);
+        height:160px;
+        padding-left:50px;
+        overflow:hidden;
+    }
+    .h_wrap{
+        margin-top:30px;
+        overflow:hidden;
+    }
+    .h_title{
+        font-size:30px;
+        color:#fff;
+        float:left;
+        line-height:40px;
+    }
+    .h_fenlei{
+        display:block;
+        float:left;
+        margin-left:7px;
+        margin-top:7px;
+        text-align:center;
+        font-size:12px;
+        line-height:15px;
+    }
+    .h_fenlei p:first-child{
+        background-color:rgb(133,133,133);
+        color:#666;
+    }
+    .h_fenlei p:last-child{
+        color:rgb(133,133,133);
+    }
+    .info{
+        margin-top:20px;
+        color:#999;
+        font-size:12px;
+    }
+    
+    .display{
+        margin-top:30px;
+    }
+    .d_item{
+        margin-top:30px;
+    }
+    .error_status{
+        color:red;
     }
 </style>

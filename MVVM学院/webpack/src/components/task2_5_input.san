@@ -6,6 +6,7 @@
      on-input="change"
      on-focus="focus"
      on-blur="blur"
+     class="{{error?'error':''}}"
      ></input>
 </template>
 
@@ -13,12 +14,13 @@
     export default {
         initData () {
             return {
-               value:11
+               error:false,
+               minLength:0
             };
         },
         inited(){
             console.log(this);
-            // this.data.get("value",value);
+            this.data.set("minLength",this.data.raw.minlenth||0);
         },
         change(value){
             this.fire("input",this.data.get("value"));
@@ -27,7 +29,9 @@
             this.fire("focus");
         },
         blur(){
-            this.fire("blur");
+            const status=this.data.get(("value")).length<this.data.get("minLength");
+            this.data.set("error",status);
+            this.fire("blur",status);
         }
     }
 </script>
@@ -36,5 +40,32 @@
     .section{
         width:90%;
         margin:0 auto;
+    }
+      input{
+        line-height:30px;
+        height: 30px;
+        width:200px;
+        padding-left:8px;
+        font-size:12px;
+        border: 1px solid #dcdfe6;
+        border-radius:1px;
+        background-color: #fff;
+        transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+        outline:none;
+
+    }
+    
+    input:hover{
+        border:1px solid #999;
+    }
+    input:focus{
+        border:1px solid #000;
+    }
+    input[disabled],input[readonly]{
+        border: 1px solid #dcdfe6;
+        cursor:not-allowed;
+    }
+    .error{
+        border-color:#DE3C25;
     }
 </style>
