@@ -1,0 +1,79 @@
+<template>
+    <div class='section'>
+        <h1>2.5表单实现Input、Checkbox组件</h1>
+        <div class='con'>
+            <header class='head'>
+                <div>
+                    输入框
+                </div>
+                <div class='info'>
+                    待补充
+                </div>
+            </header>
+        </div>
+        <san-input  
+            value="{{ value }}"
+            placeholder="{{ placeholder }}"
+            disabled="{{ disabled }}"
+            readonly="{{ readonly }}"
+            on-input="handleInput"
+            on-focus="handleInput2"
+            on-blur="handleInput3"
+            ></san-input>
+        
+        <san-checkbox
+            checked="{= checked =}"
+            disabled="{= disabled2 =}"
+            trueValue="{= trueValue =}"
+            falseValue="{= falseValue =}"
+            indeterminate="{= indeterminate =}"
+            on-change="change"
+        >
+            是否开启
+        </san-checkbox>
+    </div>
+</template>
+
+<script>
+    import sanInput from '@/components/task2_5_input'
+    import sanCheckbox from '@/components/task2_5_checkbox'
+    export default {
+        components:{
+            "san-input":sanInput,
+            "san-checkbox":sanCheckbox
+        },
+        initData () {
+            return {
+                value:123,
+                placeholder:"静静等待你的输入",
+                disabled:false,
+                readonly:false,
+
+                checked:false,
+                disabled2:false,
+                trueValue:"已开启",
+                falseValue:"已关闭",
+                indeterminate:false
+            };
+        },
+        handleInput(value){
+            console.log(value);
+        },
+        handleInput2(value){
+           console.log('获得了焦点')
+        },
+        handleInput3(value){
+            console.log('失去了焦点');
+        },
+        change(value){
+            console.log('checkbox的按钮状态改变了'+value);  
+        }
+    }
+</script>
+
+<style scoped>
+    .section{
+        width:90%;
+        margin:0 auto;
+    }
+</style>

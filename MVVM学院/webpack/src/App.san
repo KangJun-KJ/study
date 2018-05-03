@@ -30,6 +30,9 @@
                 },{
                     to:"/task2_4",
                     info:"2.4事件处理"
+                },{
+                    to:"/task2_5",
+                    info:"2.5表单实现Input、Checkbox组件"
                 }]
             }
         }

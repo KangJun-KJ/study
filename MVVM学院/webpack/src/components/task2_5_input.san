@@ -1,0 +1,40 @@
+<template>
+    <input value="{= value =}"
+     placeholder="{= placeholder =}"
+     disabled="{= disabled =}"
+     readonly="{= readonly =}"
+     on-input="change"
+     on-focus="focus"
+     on-blur="blur"
+     ></input>
+</template>
+
+<script>
+    export default {
+        initData () {
+            return {
+               value:11
+            };
+        },
+        inited(){
+            console.log(this);
+            // this.data.get("value",value);
+        },
+        change(value){
+            this.fire("input",this.data.get("value"));
+        },
+        focus(){
+            this.fire("focus");
+        },
+        blur(){
+            this.fire("blur");
+        }
+    }
+</script>
+
+<style scoped>
+    .section{
+        width:90%;
+        margin:0 auto;
+    }
+</style>
