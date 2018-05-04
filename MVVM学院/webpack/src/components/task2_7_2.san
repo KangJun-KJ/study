@@ -4,10 +4,10 @@
         <h1>2.7.2 基于san-transition的过渡动画</h1>
 
         <ul class='nList'>
-            <li s-for="item in filteredList" on-click="toggle(item.effect)" >{{item.info}}</li>
+            <li s-for="item,index in filteredList" on-click="toggle(index)" >{{item.info}}</li>
         </ul>
-        <div class='mask' s-if="showModel" s-transition="hook('fade')" on-click='toggle'>
-            <div class='bg' s-if="showModel" s-transition="hook(transitionName)">
+        <div class='mask' s-if="showIndex!=-1" s-transition="hook('fade')" on-click='toggle(-1)'>
+            <div class='bg' s-if="showIndex!=-1" s-transition="hook(transitionName)">
                 <p class='head'>任务栏</p>
                 <task-menu index=1 title="transition" content='我是一个弹窗而已,没啥信息' time="2018-5-4"></task-menu>
             </div>
@@ -58,9 +58,13 @@
                 })
             }
         },
-        toggle(effect){
-            this.data.set("transitionName",effect);
-            this.data.set("showModel", !this.data.get("showModel"))
+        toggle(index){
+            if(index !== -1){
+                console.log(this.data.get("list")[index].effect);
+                this.data.set("transitionName",this.data.get("list")[index].effect);
+            }
+            this.data.set("showIndex", index)
+            
         },
         hook: transition
     }
