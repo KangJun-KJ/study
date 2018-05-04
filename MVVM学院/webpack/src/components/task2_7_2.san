@@ -4,12 +4,16 @@
         <h1>2.7.2 基于san-transition的过渡动画</h1>
 
         <ul class='nList'>
-            <li s-for="item,index in filteredList" on-click="toggle(index)" s-transition="hook('slide')" >{{item.info}}</li>
+            <li s-for="item,index in filteredList"
+             s-transition="hook('slide',100)" 
+             on-click="toggle(index)" >
+             {{item.info}}</li>
         </ul>
+        
         <div class='mask' s-if="showIndex!=-1" s-transition="hook('fade')" on-click='toggle(-1)'>
             <div class='bg' s-if="showIndex!=-1" s-transition="hook(transitionName)">
                 <p class='head'>任务栏</p>
-                <task-menu index=1 title="transition" content='我是一个弹窗而已,没啥信息' time="2018-5-4"></task-menu>
+                <task-menu index=1 title="transition" content='哇，金色传说' time="2018-5-4"></task-menu>
             </div>
         </div>
     </div>
@@ -18,7 +22,7 @@
 <script>
     import taskMenu from '@/components/task2_6_taskMenu'
     import {transition} from 'san-transition'
-    import backBtn from '@/components/backHomeBtn.san'
+    import backBtn from '@/components/backHomeBtn'
     export default {
         components:{
             "task-menu":taskMenu,
@@ -45,8 +49,9 @@
                     info:"点击我，变小效果",
                     effect:"effect6"
                 }],
-                showIndex:-1,          //显示弹窗，-1不显示，否则表示第几种效果
-                transitionName:"effect1" //用于替换css名字
+                showIndex:-1,          //显示弹窗，-1不显示弹窗和表示显示所有列表，否则表示第几种效果,
+                transitionName:"effect1"//用于替换css名字
+                
             }
         },
         computed: {
@@ -54,13 +59,12 @@
                 var list = this.data.get("list")
                   , index = this.data.get("showIndex");
                 return list.filter(function(e,i) {
-                    return i!=index
+                    return i!=index;
                 })
             }
         },
         toggle(index){
             if(index !== -1){
-                console.log(this.data.get("list")[index].effect);
                 this.data.set("transitionName",this.data.get("list")[index].effect);
             }
             this.data.set("showIndex", index)
@@ -83,7 +87,6 @@
         li{
             line-height:30px;
             cursor:pointer;
-            transition:color .3s;
             &:hover{
                 color:#409eff;
             }
@@ -114,9 +117,11 @@
     .fade-before-enter,.fade-leave{opacity:0}
     .fade-before-leave,.fade-enter{opacity:1}
 
-    .slide-enter,.slide-leave{transition:all .5s ease-out}
-    .slide-before-enter,.slide-leave{ transform: translate(100px, 0);opacity:0}
-    .slide-before-leave,.slide-enter{ transform: translate(0px, 0);opacity:1}
+
+
+    .slide-enter, .slide-leave {transition: all .5s; }
+    .slide-enter, .slide-before-leave {opacity: 1;transform: translate(0, 0);}
+    .slide-before-enter, .slide-leave { opacity: 0; transform: translate(100px, 0); }
 
     .effect1-enter,.effect1-leave{transition:all .5s ease-out}
     .effect1-before-enter,.effect1-leave{transform: scale(0);opacity: 0;}

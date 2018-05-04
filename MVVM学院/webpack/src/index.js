@@ -11,6 +11,7 @@ import task2_5 from '@/components/task2_5'
 import task2_6 from '@/components/task2_6'
 import task2_7_1 from '@/components/task2_7_1'
 import task2_7_2 from '@/components/task2_7_2'
+import task2_7_2_demo from '@/components/task2_7_2_demo'
 
 router.add({rule: '/', Component: App, target: '#app'})
 router.add({rule: '/task2_1', Component: task2_1, target: '#app'})
@@ -21,5 +22,6 @@ router.add({rule: '/task2_5', Component: task2_5, target: '#app'})
 router.add({rule: '/task2_6', Component: task2_6, target: '#app'})
 router.add({rule: '/task2_7_1', Component: task2_7_1, target: '#app'})
 router.add({rule: '/task2_7_2', Component: task2_7_2, target: '#app'})
+router.add({rule: '/task2_7_2_demo', Component: task2_7_2_demo, target: '#app'})
 
 router.start();

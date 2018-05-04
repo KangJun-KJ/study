@@ -3,12 +3,14 @@
         <back-btn></back-btn>
         <h1>2.7.2.demo san-transition官方的两个小例子</h1>
         <button on-click="toggle">CLICK TO TOGGLE</button>
-        <p s-if="active" s-if='active' s-transition="hook('example')">Hello, san-transition!</p>
+        <p s-if="active" s-if='active' s-transition="hook('slide')">Hello, san-transition!</p>
 
         <!-- query进行数据双向绑定,让filteredList随之更新呢 -->
         <input value="{= query =}"/>
         <!-- hook两个参数 第一个css动画名字 第二个后面元素距离上一个元素动画的间隔 -->
-        <ul><li s-transition="hook('example', 300)" s-for="item in filteredList">{{item}}</li></ul>
+        <ul><li s-transition="hook('example', 300)" s-for="item in filteredList">
+        {{item.name}}
+        </li></ul>
     </div>
 </template>
 
@@ -22,7 +24,14 @@
         initData () {
             return {
                 active:true,
-                list: ["foo", "bar", "baz", "quz", "qux"],
+                // list: ["foo", "bar", "baz", "quz", "qux"],
+                list:[{
+                    name:"foo"
+                },{
+                    name:"bar"
+                },{
+                    name:"baz"
+                }],
                 query: ""
             }
         },
@@ -32,7 +41,8 @@
                 var e = this.data.get("list")
                   , t = this.data.get("query");
                 return e.filter(function(e) {
-                    return ~e.indexOf(t)
+                    console.log( ~e.name.indexOf(t));
+                    return ~e.name.indexOf(t)
                 })
             }
         },
