@@ -2,11 +2,15 @@
     <div class='section'>
         <back-btn></back-btn>
         <h1>2.7.2 基于san-transition的过渡动画</h1>
-        <button on-click="toggle">缩放</button>
-        <button on-click="toggle">旋转</button>
-        <div class='bg' s-if="showModel" s-transition="hook(transitionName, 300)">
-            <p class='head'>任务栏</p>
-            <task-menu index=1 title="transition" content='我是一个弹窗而已' time="2018-5-4"></task-menu>
+
+        <ul class='nList'>
+            <li s-for="item in list" on-click="toggle(item.effect)" >{{item.info}}</li>
+        </ul>
+        <div class='mask' s-if="showModel" s-transition="hook('fade')" on-click='toggle'>
+            <div class='bg' s-if="showModel" s-transition="hook(transitionName)">
+                <p class='head'>任务栏</p>
+                <task-menu index=1 title="transition" content='我是一个弹窗而已,没啥信息' time="2018-5-4"></task-menu>
+            </div>
         </div>
     </div>
 </template>
@@ -22,12 +26,31 @@
         },  
         initData () {
             return {
-                showModel:false,
-                transitionName:"effect1"
+                list:[{
+                    info:"点击我，变大效果",
+                    effect:"effect1"
+                },{
+                    info:"点击我，旋转效果",
+                    effect:"effect2"
+                },{
+                    info:"点击我，向上效果",
+                    effect:"effect3"
+                },{
+                    info:"点击我，翻转效果",
+                    effect:"effect4"
+                },{
+                    info:"点击我，招牌效果",
+                    effect:"effect5"
+                },{
+                    info:"点击我，变小效果",
+                    effect:"effect6"
+                }],
+                showModel:false,          //是否显示遮罩层
+                transitionName:"effect1" //用于替换css名字
             }
         },
-        toggle(index){
-            this.data.set("transitionName","effect2");
+        toggle(effect){
+            this.data.set("transitionName",effect);
             this.data.set("showModel", !this.data.get("showModel"))
         },
         hook: transition
@@ -39,8 +62,30 @@
         width:90%;
         margin:0 auto;
     }
-    .bg{
+    .nList{
+        list-style:none;
+        color:#303133;
+        font-size:14px;
+        li{
+            line-height:30px;
+            cursor:pointer;
+            transition:color .3s;
+            &:hover{
+                color:#409eff;
+            }
+        }
+    }
+    .mask{
         position:fixed;
+        top:0;
+        right:0;
+        bottom:0;
+        left:0;
+        background-color:rgba(0,0,0,0.5);
+        perspective: 1400px;
+    }
+    .bg{
+        position:absolute;
         top:50%;
         left:50%;
         margin-top:-180px;
@@ -48,7 +93,12 @@
         width:360px;
         background-color:rgb(36,36,36);
         overflow:hidden;
+        transform-style: preserve-3d;
     }
+
+    .fade-enter,.fade-leave{transition:all .5s ease-out}
+    .fade-before-enter,.fade-leave{opacity:0}
+    .fade-before-leave,.fade-enter{opacity:1}
 
     .effect1-enter,.effect1-leave{transition:all .5s ease-out}
     .effect1-before-enter,.effect1-leave{transform: scale(0);opacity: 0;}
@@ -57,5 +107,22 @@
     .effect2-enter,.effect2-leave{transition:all .5s ease-out}
     .effect2-before-enter,.effect2-leave{transform: scale(0) rotate(0deg);opacity: 0;}
     .effect2-before-leave,.effect2-enter{transform: scale(1) rotate(360deg);opacity:1}
+
+    .effect3-enter,.effect3-leave{transition:all .5s ease-out}
+    .effect3-before-enter,.effect3-leave{transform: translateY(30%);opacity: 0;}
+    .effect3-before-leave,.effect3-enter{transform: translateY(0%);opacity:1}
+
+    .effect4-enter,.effect4-leave{transition:all .5s ease-out}
+    .effect4-before-enter,.effect4-leave{transform: rotateY(-70deg);opacity: 0;}
+    .effect4-before-leave,.effect4-enter{transform: translateY(0%);opacity:1}
+
+    .effect5-enter,.effect5-leave{transition:all .5s ease-out}
+    .effect5-before-enter,.effect5-leave{transform-origin: 50% 0;transform: rotateX(-100deg);opacity: 0;}
+    .effect5-before-leave,.effect5-enter{transform: translateX(0deg);opacity:1}
+
+    .effect6-enter,.effect6-leave{transition:all .5s ease-out}
+    .effect6-before-enter,.effect6-leave{transform: scale(2);opacity: 0;}
+    .effect6-before-leave,.effect6-enter{transform: scale(1); opacity: 1;}
+   
 
 </style>
