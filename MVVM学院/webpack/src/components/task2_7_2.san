@@ -4,7 +4,7 @@
         <h1>2.7.2 基于san-transition的过渡动画</h1>
 
         <ul class='nList'>
-            <li s-for="item,index in filteredList" on-click="toggle(index)" >{{item.info}}</li>
+            <li s-for="item,index in filteredList" on-click="toggle(index)" s-transition="hook('slide')" >{{item.info}}</li>
         </ul>
         <div class='mask' s-if="showIndex!=-1" s-transition="hook('fade')" on-click='toggle(-1)'>
             <div class='bg' s-if="showIndex!=-1" s-transition="hook(transitionName)">
@@ -113,6 +113,10 @@
     .fade-enter,.fade-leave{transition:all .5s ease-out}
     .fade-before-enter,.fade-leave{opacity:0}
     .fade-before-leave,.fade-enter{opacity:1}
+
+    .slide-enter,.slide-leave{transition:all .5s ease-out}
+    .slide-before-enter,.slide-leave{ transform: translate(100px, 0);opacity:0}
+    .slide-before-leave,.slide-enter{ transform: translate(0px, 0);opacity:1}
 
     .effect1-enter,.effect1-leave{transition:all .5s ease-out}
     .effect1-before-enter,.effect1-leave{transform: scale(0);opacity: 0;}
