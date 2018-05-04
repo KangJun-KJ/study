@@ -1,0 +1,94 @@
+<template>
+    <div class='section'>
+        <back-btn></back-btn>
+        <h1>2.7.1 使用s-transition指令实现过渡动画</h1>
+        <div>
+            <button on-click="toggle">toggle</button>
+            <span s-if="show" s-transition="hook">
+                Transition Layer
+            </span>
+        </div>
+    </div>
+</template>
+
+<script>
+    import backBtn from '@/components/backHomeBtn.san'
+    export default {
+        components:{
+            "back-btn":backBtn
+        },
+        initData() {
+            return {show: true};
+        },
+        toggle() {
+            this.data.set('show',!this.data.get('show'));
+        },
+        attached(){
+            if (!window.requestAnimationFrame) {
+                window.requestAnimationFrame = function(fn) {
+                    setTimeout(fn, 17);
+                };    
+            }
+        },
+        hook:function() {
+            /* your answer */
+             return {
+                enter: function (el, done) {
+
+                    var steps = 20;
+                    var currentStep = 0;
+
+                    function goStep() {
+                        if (currentStep >= steps) {
+                            el.style.opacity = 1;
+                            done();
+                            return;
+                        }
+
+                        el.style.opacity = 1 / steps * currentStep++;
+                        requestAnimationFrame(goStep);
+                    }
+
+                    goStep();
+                },
+
+                leave: function (el, done) {
+
+                    var steps = 20;
+                    var currentStep = 0;
+
+                    function goStep() {
+                        if (currentStep >= steps) {
+                            el.style.opacity = 0;
+                            done();
+                            return;
+                        }
+
+                        el.style.opacity = 1 - 1 / steps * currentStep++;
+                        requestAnimationFrame(goStep);
+                    }
+
+                    goStep();
+                }
+            }
+        }
+    }
+</script>
+
+<style>
+    .section{
+        width:90%;
+        margin:0 auto;
+    }
+    .enter, .leave {
+    transition: all .5s;
+    }
+
+    .before-enter, .leave {
+    opacity: 0;
+    }
+
+    .enter, .before-leave {
+    opacity: 1;
+    }
+</style>

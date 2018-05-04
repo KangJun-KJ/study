@@ -68,7 +68,8 @@
             margin:0 auto;
             text-align:left;
             font-size:20px;
-            line-height:50px;
+            line-height:40px;
+            white-space: nowrap;
         }
         .content{
             width:60%;

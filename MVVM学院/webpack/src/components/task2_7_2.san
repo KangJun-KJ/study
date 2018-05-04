@@ -1,0 +1,61 @@
+<template>
+    <div class='section'>
+        <back-btn></back-btn>
+        <h1>2.7.2 基于san-transition的过渡动画</h1>
+        <button on-click="toggle">缩放</button>
+        <button on-click="toggle">旋转</button>
+        <div class='bg' s-if="showModel" s-transition="hook(transitionName, 300)">
+            <p class='head'>任务栏</p>
+            <task-menu index=1 title="transition" content='我是一个弹窗而已' time="2018-5-4"></task-menu>
+        </div>
+    </div>
+</template>
+
+<script>
+    import taskMenu from '@/components/task2_6_taskMenu'
+    import {transition} from 'san-transition'
+    import backBtn from '@/components/backHomeBtn.san'
+    export default {
+        components:{
+            "task-menu":taskMenu,
+            "back-btn":backBtn
+        },  
+        initData () {
+            return {
+                showModel:false,
+                transitionName:"effect1"
+            }
+        },
+        toggle(index){
+            this.data.set("transitionName","effect2");
+            this.data.set("showModel", !this.data.get("showModel"))
+        },
+        hook: transition
+    }
+</script>
+
+<style lang='sass' scoped>
+    .section{
+        width:90%;
+        margin:0 auto;
+    }
+    .bg{
+        position:fixed;
+        top:50%;
+        left:50%;
+        margin-top:-180px;
+        margin-left:-180px;
+        width:360px;
+        background-color:rgb(36,36,36);
+        overflow:hidden;
+    }
+
+    .effect1-enter,.effect1-leave{transition:all .5s ease-out}
+    .effect1-before-enter,.effect1-leave{transform: scale(0);opacity: 0;}
+    .effect1-before-leave,.effect1-enter{transform: scale(1);opacity:1}
+
+    .effect2-enter,.effect2-leave{transition:all .5s ease-out}
+    .effect2-before-enter,.effect2-leave{transform: scale(0) rotate(0deg);opacity: 0;}
+    .effect2-before-leave,.effect2-enter{transform: scale(1) rotate(360deg);opacity:1}
+
+</style>

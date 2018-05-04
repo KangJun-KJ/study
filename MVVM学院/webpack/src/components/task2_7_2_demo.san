@@ -1,0 +1,78 @@
+<template>
+    <div class='section'>
+        <back-btn></back-btn>
+        <h1>2.7.2.demo san-transition官方的两个小例子</h1>
+        <button on-click="toggle">CLICK TO TOGGLE</button>
+        <p s-if="active" s-if='active' s-transition="hook('example')">Hello, san-transition!</p>
+
+        <!-- query进行数据双向绑定,让filteredList随之更新呢 -->
+        <input value="{= query =}"/>
+        <!-- hook两个参数 第一个css动画名字 第二个后面元素距离上一个元素动画的间隔 -->
+        <ul><li s-transition="hook('example', 300)" s-for="item in filteredList">{{item}}</li></ul>
+    </div>
+</template>
+
+<script>
+    import {transition} from 'san-transition'
+    import backBtn from '@/components/backHomeBtn.san'
+    export default {
+        components:{
+            "back-btn":backBtn
+        },  
+        initData () {
+            return {
+                active:true,
+                list: ["foo", "bar", "baz", "quz", "qux"],
+                query: ""
+            }
+        },
+        computed: {
+            // 当query改变的时候，同时也改变list符合项。
+            filteredList: function() {
+                var e = this.data.get("list")
+                  , t = this.data.get("query");
+                return e.filter(function(e) {
+                    return ~e.indexOf(t)
+                })
+            }
+        },
+        toggle(index){
+            // 通过设置active为true或者false来是否显示
+             this.data.set("active", !this.data.get("active"))
+        },
+        hook: transition
+    }
+</script>
+
+<style lang='sass' scoped>
+    .section{
+        width:90%;
+        margin:0 auto;
+    }
+    .bg{
+        position:fixed;
+        top:50%;
+        left:50%;
+        margin-top:-180px;
+        margin-left:-180px;
+        width:360px;
+        background-color:rgb(36,36,36);
+        overflow:hidden;
+    }
+
+    .slide-enter, .slide-leave {
+        transition: all .5s;
+    }
+    .slide-enter, .slide-before-leave {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+    .slide-before-enter, .slide-leave {
+        opacity: 0;
+        transform: translate(100px, 0);
+    }
+    .example-enter,.example-leave{transition:all .5s ease-out}
+    .example-before-enter,.example-leave{transform:scaleY(0);opacity:0}
+    .example-before-leave,.example-enter{opacity:1}
+
+</style>

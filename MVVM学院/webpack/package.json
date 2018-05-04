@@ -27,6 +27,7 @@
     "san": "^3.5.7",
     "san-loader": "^0.0.7",
     "san-router": "^1.2.0",
+    "san-transition": "^1.1.0",
     "sass-loader": "^7.0.1",
     "style-loader": "^0.21.0",
     "webpack": "^4.6.0",
