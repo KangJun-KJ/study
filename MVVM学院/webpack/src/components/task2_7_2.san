@@ -4,7 +4,7 @@
         <h1>2.7.2 基于san-transition的过渡动画</h1>
 
         <ul class='nList'>
-            <li s-for="item in list" on-click="toggle(item.effect)" >{{item.info}}</li>
+            <li s-for="item in filteredList" on-click="toggle(item.effect)" >{{item.info}}</li>
         </ul>
         <div class='mask' s-if="showModel" s-transition="hook('fade')" on-click='toggle'>
             <div class='bg' s-if="showModel" s-transition="hook(transitionName)">
@@ -45,8 +45,17 @@
                     info:"点击我，变小效果",
                     effect:"effect6"
                 }],
-                showModel:false,          //是否显示遮罩层
+                showIndex:-1,          //显示弹窗，-1不显示，否则表示第几种效果
                 transitionName:"effect1" //用于替换css名字
+            }
+        },
+        computed: {
+            filteredList: function() {
+                var list = this.data.get("list")
+                  , index = this.data.get("showIndex");
+                return list.filter(function(e,i) {
+                    return i!=index
+                })
             }
         },
         toggle(effect){
@@ -63,6 +72,7 @@
         margin:0 auto;
     }
     .nList{
+        display:inline-block;
         list-style:none;
         color:#303133;
         font-size:14px;
