@@ -3,12 +3,11 @@
         <input  type="checkbox"
             checked="{= checked =}"
             disabled="{= disabled =}"
-            trueValue="{= trueValue =}"
-            falseValue="{= falseValue =}"
             indeterminate="{= indeterminate =}"
             on-change="change"
-        >
+        >   
         </input>
+        <label>{{(checked==true||checked=="true")?truevalue:falsevalue}}</label>
        <!-- 
          <?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="icon" width="32px" height="32.00px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path fill="#1296db" d="M726.016 553.984l0-84.010667-427.989333 0 0 84.010667 427.989333 0zM809.984 128q34.005333 0 59.989333 25.984t25.984 59.989333l0 596.010667q0 34.005333-25.984 59.989333t-59.989333 25.984l-596.010667 0q-34.005333 0-59.989333-25.984t-25.984-59.989333l0-596.010667q0-34.005333 25.984-59.989333t59.989333-25.984l596.010667 0z" /></svg>
         <?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="icon" width="32px" height="32.00px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path fill="#1296db" d="M809.984 128q34.005333 0 59.989333 25.984t25.984 59.989333l0 596.010667q0 34.005333-25.984 59.989333t-59.989333 25.984l-596.010667 0q-34.005333 0-59.989333-25.984t-25.984-59.989333l0-596.010667q0-34.005333 25.984-59.989333t59.989333-25.984l596.010667 0zM809.984 214.016l-596.010667 0 0 596.010667 596.010667 0 0-596.010667z" /></svg>
@@ -21,14 +20,17 @@
     export default {
         initData () {
             return {
-               value:11
             };
         },
         inited(){
-            console.log(this);
-            // this.data.get("value",value);
+            // console.log(this.data.raw);
         },
         change(value){
+            if(this.data.get("checked")==true){
+                this.data.set("checked",true);
+            }else{
+                this.data.set("checked",false);
+            }
             this.fire("change",this.data.get("checked"));
         },
         focus(){
@@ -46,5 +48,7 @@
         width:90%;
         margin:0 auto;
     }
-  
+    input[disabled]{
+        cursor:not-allowed;
+    }
 </style>

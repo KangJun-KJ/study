@@ -29,7 +29,7 @@
             <div class='d_item'>
                 <san-input  
                     value="{{ value }}"
-                    placeholder="{{ placeholder }}"
+                    placeholder="disabled"
                     disabled="{{ !disabled }}"
                     ></san-input>
                 <span>disabled</span>
@@ -37,7 +37,7 @@
             <div class='d_item'>
                 <san-input  
                     value="{{ value }}"
-                    placeholder="{{ placeholder }}"
+                    placeholder="readonly"
                     readonly="{{ !readonly }}"
                     ></san-input>
                 <span>readonly</span>
@@ -58,7 +58,7 @@
             <div class='d_item'>
                 <san-input  
                     value="{{ value }}"
-                    placeholder="{{ placeholder }}"
+                    placeholder="输入不少于6位的字符串"
                     minlenth=6
                     on-blur="handleInput4"
                     ></san-input>
@@ -83,15 +83,39 @@
         </div>
         <div class='display'>
                 <san-checkbox
-                    checked="{= checked =}"
-                    disabled="{= disabled2 =}"
-                    trueValue="{= trueValue =}"
-                    falseValue="{= falseValue =}"
-                    indeterminate="{= indeterminate =}"
-                    on-change="change">
-                    基本用法
+                    checked=true
+                    trueValue="被选中">
                 </san-checkbox>
-            </div>
+                <san-checkbox
+                    checked=false
+                    falseValue="未选中">
+                </san-checkbox>
+                <san-checkbox
+                    checked=false
+                    disabled=true
+                    falseValue="禁用">
+                </san-checkbox>
+                <san-checkbox
+                    checked=true
+                    disabled=true
+                    trueValue="必选">
+                </san-checkbox>
+                <san-checkbox
+                    checked=false
+                    disabled=true
+                    falseValue="必选部分"
+                    indeterminate="true">
+                </san-checkbox>
+                <san-checkbox
+                    checked=false
+                    trueValue="{{trueValue}}"
+                    falseValue="{{falseValue}}"
+                    on-change="change"
+                    >
+                </san-checkbox>
+
+
+        </div>
         
     </div>
 </template>
@@ -115,8 +139,8 @@
 
                 checked:false,
                 disabled2:false,
-                trueValue:"已开启",
-                falseValue:"已关闭",
+                trueValue:"静静地等待被点击",
+                falseValue:"静静地等待被点击",
                 indeterminate:false
             };
         },
@@ -139,7 +163,13 @@
            
         },
         change(value){
-            console.log('checkbox的按钮状态改变了'+value);  
+            console.log('checkbox的按钮状态改变了'+(value==true)); 
+            if(value==true){
+                this.data.set("trueValue","触发change事件,被选中了");
+                
+            } else{
+                this.data.set("falseValue","触发change事件,未被选中了");
+            }
         }
     }
 </script>

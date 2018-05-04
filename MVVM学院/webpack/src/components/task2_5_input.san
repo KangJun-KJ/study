@@ -19,7 +19,6 @@
             };
         },
         inited(){
-            console.log(this);
             this.data.set("minLength",this.data.raw.minlenth||0);
         },
         change(value){
