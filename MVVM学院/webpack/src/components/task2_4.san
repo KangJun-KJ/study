@@ -1,5 +1,6 @@
 <template>
     <div class='section'>
+         <back-btn></back-btn>
         <h1>2.3样式控制</h1>
         <parent></parent>
         <p style="{{msg.length?'color:pink':''}}">我是更高层的父组件：{{msg.length?msg:"我也在静静地等待用户输入"}}</p>
@@ -7,10 +8,12 @@
 </template>
 
 <script>
+    import backBtn from '@/components/backHomeBtn.san'
     import parent from '@/components/task2_4_parent.san';
     export default{
         components:{
-            "parent":parent
+            "parent":parent,
+            "back-btn":backBtn
         },
         initData(){
             return {

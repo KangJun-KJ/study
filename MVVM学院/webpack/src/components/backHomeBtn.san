@@ -1,0 +1,64 @@
+<template>
+    <div>
+        <button class='ripple' on-click='backhome'>返回</button>
+        <button class='ripple' on-click='goCode'>查看代码</button>
+    </div>
+</template>
+
+<script>
+    export default {
+        initData () {
+            return {
+                
+            };
+        },
+        backhome(){
+            var url=window.location.href;
+            console.log(url)
+            window.location.href=url.substr(0,url.indexOf("#"));
+        },
+        goCode(){
+            window.open("https://github.com/KangJun-KJ/study/blob/gh-pages/MVVM%E5%AD%A6%E9%99%A2/webpack/src/components/"+window.location.hash.substr(2)+".san");
+        }
+    }
+</script>
+
+<style lang='sass' scoped>
+    button{
+        line-height:30px;
+        text-align:center;
+        padding:0 20px;
+        outline:none;
+        border:none;
+        color:#fff;
+        border-radius:3px;
+        background-color:#67c23a;
+        cursor:pointer;
+    }
+    .ripple{
+        position:relative;
+        overflow: hidden;
+        transform: translate3d(0,0,0);
+    }
+    .ripple:after{
+        content:"";
+        display: block;
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        pointer-events: none;
+        background-image: radial-gradient(circle,#333 10%,transparent 10.01%);
+        background-repeat: no-repeat;
+        background-position:50%;
+        transform: scale(10,10);
+        opacity: 0;
+        transition:transform .5s, opacity 1s;
+    }
+    .ripple:active:after{
+        transform: scale(0,0);
+        opacity: .2;
+        transition:none;
+    }
+</style>

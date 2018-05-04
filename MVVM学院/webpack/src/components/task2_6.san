@@ -1,0 +1,55 @@
+<template>
+    <div class='section'>
+        <back-btn></back-btn>
+        <h1>2.6插槽相关</h1>
+        <!--
+              
+        -->
+
+        <task-menu s-for="d,index in data" data="{{ d }}" >   
+            <h1 slot='sort' class='sort'>任务{{index+1}}</h1>
+            <h3 slot="title"> {{item.title}} </h3>
+            <div slot="content"> {{item.content}} </div>
+            <div slot="time"> {{item.time}} </div>
+        </task-menu>
+    </div>
+</template>
+
+<script>
+    import taskMenu from '@/components/task2_6_taskMenu'
+    import backBtn from '@/components/backHomeBtn.san'
+
+    export default {
+        components:{
+            "task-menu":taskMenu,
+            "back-btn":backBtn
+        },  
+        initData () {
+            return {
+                data:[[
+                    {name:"title",title:"我是标题党"},
+                    {name:"content",content:"我是内容"},
+                    {name:"time",time:"2018-5-4"},
+                ],[
+                    {name:"title",title:"我是标题党"},
+                    {name:"content",content:"我是内容"},
+                    {name:"time",time:"2018-5-4"},
+                ],[
+                    {name:"title",title:"我是标题党"},
+                    {name:"content",content:"我是内容"},
+                    {name:"time",time:"2018-5-4"},
+                ]]
+            };
+        }
+    }
+</script>
+
+<style lang='sass' scoped>
+    .section{
+        width:90%;
+        margin:0 auto;
+    }
+    .sort{
+        line-height:100px;
+    }
+</style>

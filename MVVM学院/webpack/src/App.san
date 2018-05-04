@@ -21,7 +21,7 @@
                 liNum:[{
                     to:"/task2_1",
                     info:"2.1数据绑定"
-                },{
+                },{ 
                     to:"/task2_2",
                     info:"2.2循环和条件"
                 },{
@@ -33,6 +33,9 @@
                 },{
                     to:"/task2_5",
                     info:"2.5表单实现Input、Checkbox组件"
+                },{
+                    to:"/task2_6",
+                    info:"2.6插槽相关"
                 }]
             }
         }

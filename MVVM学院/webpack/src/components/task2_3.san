@@ -1,5 +1,6 @@
 <template>
     <div class='section'>
+        <back-btn></back-btn>   
         <h1>2.3样式控制</h1>
         <div id="block"class="{{status===0 ? 'bg' : ''}}" style="{{status===1 ? 'background:yellow;' : ''}}" >
         </div>
@@ -9,7 +10,11 @@
 </template>
 
 <script>
+    import backBtn from '@/components/backHomeBtn.san'
     export default {
+        components:{
+            "back-btn":backBtn
+        },
         initData () {
             return {
                 status:-1 //-1无样式，0class样式 1style样式

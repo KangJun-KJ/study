@@ -1,5 +1,6 @@
 <template>
     <div class='section'>
+        <back-btn></back-btn>
         <h1>2.1数据绑定</h1>
         <input type="text" placeholder="姓名(string)" value="{= name =}">
         <input type="number" placeholder="年龄(numer)" value="{= age =}">
@@ -15,7 +16,11 @@
 </template>
 
 <script>
+    import backBtn from '@/components/backHomeBtn.san'
     export default {
+        components:{
+            "back-btn":backBtn
+        },
         initData () {
             return {
                 name:"",

@@ -1,5 +1,6 @@
 <template>
     <div class='section'>
+         <back-btn></back-btn>
         <h1>2.5表单实现Input、Checkbox组件</h1>
         <div class='con'>
             <header class='head'>
@@ -123,10 +124,12 @@
 <script>
     import sanInput from '@/components/task2_5_input'
     import sanCheckbox from '@/components/task2_5_checkbox'
+    import backBtn from '@/components/backHomeBtn.san'
     export default {
         components:{
             "san-input":sanInput,
-            "san-checkbox":sanCheckbox
+            "san-checkbox":sanCheckbox,
+            "back-btn":backBtn
         },
         initData () {
             return {

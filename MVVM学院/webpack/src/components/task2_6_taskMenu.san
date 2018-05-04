@@ -1,0 +1,32 @@
+<template>
+    <div class='task_menu'>
+        <slot name="sort" class='sort'></slot>
+        <!-- 动态命名和使用数据-->
+        <slot s-for="item in data" name="{{item.name}}" var-item="item">
+            {{item[item.name]}}
+        </slot>
+    </div>
+</template>
+
+<script>
+    export default {
+        initData () {
+            return {
+            };
+        },
+        attached(){
+        }
+    }
+</script>
+
+<style lang='sass' scoped>
+    .task_menu{
+        float:left;
+        width:25%;
+        min-width:180px;
+        height:250px;
+        margin-left:8%;
+        text-align:center;
+        border:1px solid #333;
+    }
+</style>
