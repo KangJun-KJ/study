@@ -1,12 +1,20 @@
 <template>
     <div class='task_menu'>
-        <slot name="sort" class='sort'></slot>
+        <slot name="sort" s-if="!index" ></slot>
+         <h3 s-if="index" class='sort'>任务{{index}}</h3>
         <!-- 动态命名和使用数据-->
-        <slot s-for="item in data" name="{{item.name}}" var-item="item">
-            {{item[item.name]}}
-        </slot>
+        <div class='body'>
+            <slot s-for="item in data"  name="{{item.name}}" var-item="item" s-if="!title">
+                {{item[item.name]}}
+             </slot>
+             
+            <p s-if="title"  class='title'>标题: {{title}} </p>
+           <div s-if="content" class='content'>内容: {{content}} </div>
+            <div s-if="time" class='time'>时间: {{time}} </div><!-- -->
+        </div>
     </div>
 </template>
+
 
 <script>
     export default {
@@ -21,12 +29,68 @@
 
 <style lang='sass' scoped>
     .task_menu{
+        position:relative;
         float:left;
-        width:25%;
-        min-width:180px;
-        height:250px;
-        margin-left:8%;
+        width:300px;
+        height:300px;
+        margin:0  0  30px 30px;
         text-align:center;
         border:1px solid #333;
+        border-radius:5px;
+        background-color:rgb(252,240,227);
+        &::after{
+            content:"";
+            position:absolute;
+            display:block;
+            top:5%;
+            left:5%;
+            width:90%;
+            height:90%;
+            border:2px solid #FFC107; 
+            border-radius:5px;
+        }
+        .body{
+            width:210px;
+            height:140px;
+            margin:auto;
+            box-shadow:0px 0px 5px rgb(255,232,164);
+            background:rgb(255,232,164);
+            
+        }
+        .head{
+            color:#FFF;
+            font-size:40px;
+            text-align:center;
+            margin:100px auto 60px;
+        }
+        .title{
+            width:60%;
+            margin:0 auto;
+            text-align:left;
+            font-size:20px;
+            line-height:50px;
+        }
+        .content{
+            width:60%;
+            font-size:14px;
+            margin:10px auto;
+            text-align:left;
+        }
+        .time{
+            width:60%;
+            margin:0 auto;
+            text-align:left;
+        }
+        .sort{
+            display:block;
+            margin:30px auto;
+            width:140px;
+            height:50px;
+            line-height:50px;
+            color:#DE3C25;
+            background-color:rgb(241,185,32);
+            font-weight:lighter;
+            border-radius:5px;
+        }
     }
 </style>

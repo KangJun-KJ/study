@@ -6,19 +6,24 @@
               
         -->
 
-        <task-menu s-for="d,index in data" data="{{ d }}" >   
-            <h1 slot='sort' class='sort'>任务{{index+1}}</h1>
-            <h3 slot="title"> {{item.title}} </h3>
-            <div slot="content"> {{item.content}} </div>
-            <div slot="time"> {{item.time}} </div>
-        </task-menu>
+        <div class='bg'>
+            <p class='head'>任务栏</p>
+            <task-menu s-for="d,index in data" data="{{ d }}" >   
+                <h3 slot='sort' class='sort'>任务{{index+1}}</h3>
+                <p slot="title" class='title'>标题: {{item.title}} </p>
+                <div slot="content" class='content'>内容: {{item.content}} </div>
+                <div slot="time" class='time'>时间: {{item.time}} </div>
+            </task-menu>
+            <task-menu index=4 title="插槽" content='第二种插槽的写法' time="2018-5-4"></task-menu>
+            <task-menu index=5 title="插槽" content='第二种插槽的写法' time="2018-5-4"></task-menu>
+            <task-menu index=6 title="插槽" content='第二种插槽的写法' time="2018-5-4"></task-menu>
+        </div>
     </div>
 </template>
 
 <script>
     import taskMenu from '@/components/task2_6_taskMenu'
     import backBtn from '@/components/backHomeBtn.san'
-
     export default {
         components:{
             "task-menu":taskMenu,
@@ -27,16 +32,16 @@
         initData () {
             return {
                 data:[[
-                    {name:"title",title:"我是标题党"},
-                    {name:"content",content:"我是内容"},
+                    {name:"title",title:"插槽"},
+                    {name:"content",content:"动态命名+插槽数据"},
                     {name:"time",time:"2018-5-4"},
                 ],[
-                    {name:"title",title:"我是标题党"},
-                    {name:"content",content:"我是内容"},
+                    {name:"title",title:"插槽"},
+                    {name:"content",content:"动态命名+插槽数据"},
                     {name:"time",time:"2018-5-4"},
                 ],[
-                    {name:"title",title:"我是标题党"},
-                    {name:"content",content:"我是内容"},
+                    {name:"title",title:"插槽"},
+                    {name:"content",content:"动态命名+插槽数据"},
                     {name:"time",time:"2018-5-4"},
                 ]]
             };
@@ -50,6 +55,45 @@
         margin:0 auto;
     }
     .sort{
-        line-height:100px;
+        display:block;
+        margin:30px auto;
+        width:140px;
+        height:50px;
+        line-height:50px;
+        color:#DE3C25;
+        background-color:rgb(241,185,32);
+        font-weight:lighter;
+        border-radius:5px;
+    }
+    .bg{
+        width:1030px;
+        margin:auto;
+        background-color:rgb(36,36,36);
+        overflow:hidden;
+        margin-bottom:70px;
+        .head{
+            color:#FFF;
+            font-size:40px;
+            text-align:center;
+            margin:100px auto 60px;
+        }
+        .title{
+            width:60%;
+            margin:0 auto;
+            text-align:left;
+            font-size:20px;
+            line-height:50px;
+        }
+        .content{
+            width:60%;
+            font-size:14px;
+            margin:10px auto;
+            text-align:left;
+        }
+        .time{
+            width:60%;
+            margin:0 auto;
+            text-align:left;
+        }
     }
 </style>
