@@ -2,7 +2,7 @@
     <div class='section'>
         <back-btn></back-btn>   
         <h1>2.3样式控制</h1>
-        <div id="block"class="{{status===0 ? 'bg' : ''}}" style="{{status===1 ? 'background:yellow;' : ''}}" >
+        <div id="block"class="{{status===1 ? 'bg' : ''}}" style="background:{{bg}}" >
         </div>
         <button on-click='qiehuan1'>class切换颜色</button>
         <button on-click='qiehuan2'>style切换颜色</button>
@@ -17,14 +17,17 @@
         },
         initData () {
             return {
-                status:-1 //-1无样式，0class样式 1style样式
+                status:0, 
+                bg:""
             };
         },
         qiehuan1(){
-            this.data.set('status',0);
+            this.data.set("bg","");
+            this.data.set('status',1);
         },
         qiehuan2(){
-            this.data.set('status',1);
+           this.data.set("status",0);
+           this.data.set("bg","yellow")
         }
     }
 </script>

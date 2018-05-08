@@ -1,0 +1,36 @@
+<template>
+    <div class='section'>
+        <back-btn></back-btn>
+        <h1>2.8 组件实现加生命周期</h1>
+        <panels  title="生命周期的一些特点">
+            <div slot="content"  >
+                <ul>
+                    <li>生命周期代表组件的状态，生命周期本质就是状态管理。</li>
+                    <li>在生命周期到达时，对应的钩子函数会被触发运行。</li>
+                    <li>并存。比如 attached 和 created 等状态是同时并存的。</li>
+                    <li>互斥。attached 和 detached 是互斥的，disposed 会互斥掉其它所有的状态。</li>
+                    <li>有的时间点并不代表组件状态，只代表某个行为。当行为完成时，钩子函数也会触发。如 updated 代表每次数据变化导致的视图变更完成。</li>
+                </ul>
+            </div>
+        </panels>
+    </div>
+</template>
+
+<script>
+    import backBtn from '@/components/backHomeBtn'
+    import panels from '@/components/task2_8_panels'
+    
+    export default {
+        components:{
+            "back-btn":backBtn,
+            "panels":panels
+        }
+    }
+</script>
+
+<style lang='sass' scoped>
+    .section{
+        width:90%;
+        margin:0 auto;
+    }
+</style>

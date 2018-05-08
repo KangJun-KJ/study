@@ -1,0 +1,22 @@
+<template>
+    <div>
+        未做
+    </div>
+</template>
+
+<script>
+   export default {
+        initData () {
+            return {
+                open:false
+            };
+        },
+        attached(){
+            console.log(this.data.get("options"))
+        }
+    }
+</script>
+
+<style>
+
+</style>

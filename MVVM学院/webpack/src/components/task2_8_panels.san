@@ -1,0 +1,91 @@
+<template>
+    <div class="panels {{active ? 'active' : ''}}"  >
+        <div class='p_title' s-ref='panels'>
+            {{title}}
+            <i class='toggleBtn ripple' on-click="toggle"></i>
+        </div>
+        <div class='p_content'>
+            <slot  name='content' ></slot>
+        </div>
+    </div>
+</template>
+
+<script>
+    import backBtn from '@/components/backHomeBtn.san'
+    export default {
+        components:{
+            "back-btn":backBtn
+        },  
+        initData () {
+            return {
+                active:false,
+                height:"auto"
+            };
+        },
+        toggle(){
+            //通过active的布尔值来设置面板打开和关闭的
+            this.data.set("active",!this.data.get("active"));
+        },
+        compiled(){
+            console.log("1.----组件视图模板编译完成");
+            console.log(this.ref("panels"));
+        },
+        inited(){
+            console.log("2.----组件实例初始化完成");
+            console.log(this.ref("panels"));
+        },
+        created(){
+            console.log("3.----组件元素创建完成");
+            console.log(this.ref("panels"));
+        },
+        attached(){
+            console.log("4.----组件已被附加到页面中");
+            console.log(this.ref("panels"));
+        },
+        detached(){
+            console.log("5.----组件从页面中移除");
+        },
+        disposed(){
+            console.log("6.----组件卸载完成");
+        }
+    }
+</script>
+
+<style lang='sass' scoped>
+    .panels{
+        border: 1px solid #ebebeb;
+        border-radius: 3px;
+        padding:24px;
+        color:#666;
+        position:relative;
+        .p_title{
+            line-height:48px;
+            .toggleBtn{
+                display:block;
+                float:right;
+                width:30px;
+                height:30px;
+                margin-top:9px;
+                border-radius:100%;
+                cursor:pointer;
+                background:url(./../assets/arrow.png) no-repeat center;
+                transition:transform .5s;
+            }
+        }
+        .p_content{
+            will-change:max-height;
+            color:#333; 
+            overflow:hidden;
+            max-height:0px;
+            transition:max-height .5s ;
+        }
+    }
+     .active{
+        .toggleBtn{
+            transform:rotate(-180deg);
+        }
+        .p_content{
+            max-height:130px;
+        }
+    }   
+</style>
