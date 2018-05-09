@@ -3,8 +3,17 @@
         <back-btn></back-btn>
         <h1>2.7.1 使用s-transition指令实现过渡动画</h1>
         <div>
+            <h3>通过改变opacity</h3>
             <button on-click="toggle">toggle</button>
             <span s-if="show" s-transition="hook">
+                Transition Layer
+            </span>
+        </div>
+
+        <div>
+            <h3>通过改变class</h3>
+            <button on-click="toggle2">toggle</button>
+            <span s-if="show2" s-transition="hook2">
                 Transition Layer
             </span>
         </div>
@@ -18,10 +27,16 @@
             "back-btn":backBtn
         },
         initData() {
-            return {show: true};
+            return {
+                show: true,
+                show2: true
+            };
         },
         toggle() {
             this.data.set('show',!this.data.get('show'));
+        },
+        toggle2() {
+            this.data.set('show2',!this.data.get('show2'));
         },
         attached(){
             if (!window.requestAnimationFrame) {
@@ -71,6 +86,40 @@
                     goStep();
                 }
             }
+        },
+        hook2(){
+            return {
+                enterEnd:true,
+                leaveEnd:true,
+                enter(el,done){
+                    console.log(this);
+                    console.log(this.enterflag);
+                    this.enterEnd=false;
+                    el.classList.add("before-enter");
+                    setTimeout(()=>{
+                        el.classList.remove("before-enter");
+                        el.classList.add("enter");
+                    },0);
+                    el.addEventListener("transitionend", function(){
+                        el.classList.remove("enter");
+                        this.enterEnd=true;
+                        done();
+                    });
+                },
+                leave(el,done){
+                    this.leaveEnd=false;
+                    el.classList.add("before-leave");
+                    setTimeout(()=>{
+                        el.classList.remove("before-leave");
+                        el.classList.add("leave");
+                    },0);
+                    el.addEventListener("transitionend", function(){
+                        el.classList.remove("leave");
+                        this.leaveEnd=true;
+                        done();
+                    });
+                }
+            }
         }
     }
 </script>
@@ -81,14 +130,14 @@
         margin:0 auto;
     }
     .enter, .leave {
-    transition: all .5s;
+        transition: all .5s;
     }
 
     .before-enter, .leave {
-    opacity: 0;
+        opacity: 0;
     }
 
     .enter, .before-leave {
-    opacity: 1;
+        opacity: 1;
     }
 </style>
