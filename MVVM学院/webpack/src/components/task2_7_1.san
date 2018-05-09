@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import backBtn from '@/components/backHomeBtn.san'
+    import backBtn from '@/components/backHomeBtn'
     export default {
         components:{
             "back-btn":backBtn
@@ -87,37 +87,36 @@
                 }
             }
         },
+        //获取元素的transition-duration时间
+        getElTransitionDurTime(el){
+            return parseFloat(getComputedStyle(el).transitionDuration)*1000;
+        },
         hook2(){
+            const _this=this;
             return {
-                enterEnd:true,
-                leaveEnd:true,
                 enter(el,done){
-                    console.log(this);
-                    console.log(this.enterflag);
-                    this.enterEnd=false;
                     el.classList.add("before-enter");
                     setTimeout(()=>{
                         el.classList.remove("before-enter");
                         el.classList.add("enter");
+                        setTimeout(()=>{
+                            el.classList.remove("enter");
+                            done();
+                        },_this.getElTransitionDurTime(el));
                     },0);
-                    el.addEventListener("transitionend", function(){
-                        el.classList.remove("enter");
-                        this.enterEnd=true;
-                        done();
-                    });
+                    
                 },
                 leave(el,done){
-                    this.leaveEnd=false;
                     el.classList.add("before-leave");
                     setTimeout(()=>{
                         el.classList.remove("before-leave");
                         el.classList.add("leave");
+                        setTimeout(()=>{
+                            el.classList.remove("leave");
+                            done();
+                        },_this.getElTransitionDurTime(el));
                     },0);
-                    el.addEventListener("transitionend", function(){
-                        el.classList.remove("leave");
-                        this.leaveEnd=true;
-                        done();
-                    });
+                    
                 }
             }
         }
