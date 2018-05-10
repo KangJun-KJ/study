@@ -27,25 +27,31 @@
             this.data.set("active",!this.data.get("active"));
         },
         compiled(){
+            console.log(this);
             console.log("1.----组件视图模板编译完成");
             console.log(this.ref("panels"));
         },
         inited(){
+            console.log(this);
             console.log("2.----组件实例初始化完成");
             console.log(this.ref("panels"));
         },
         created(){
+            console.log(this);
             console.log("3.----组件元素创建完成");
             console.log(this.ref("panels"));
         },
         attached(){
+            console.log(this);
             console.log("4.----组件已被附加到页面中");
             console.log(this.ref("panels"));
         },
         detached(){
+            console.log(this);
             console.log("5.----组件从页面中移除");
         },
         disposed(){
+            console.log(this);
             console.log("6.----组件卸载完成");
         }
     }
