@@ -1,9 +1,7 @@
 <template>
     <div class='section'>
-        <!--
             <back-btn></back-btn>
             <h1>3.1 用递归的方式实现级联组件</h1>
-        -->
          <div>
             <h3> 点击触发子菜单</h3>
             <cascader
@@ -17,10 +15,11 @@
 
 <script>
     import cascader from '@/components/task3_1_cascader'
-
+    import backBtn from '@/components/backHomeBtn.san'
     export default {
             components:{
-                "cascader":cascader
+                "cascader":cascader,
+                "back-btn":backBtn
             },
             initData () {
                 return {

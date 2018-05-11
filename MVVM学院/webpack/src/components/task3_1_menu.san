@@ -16,7 +16,6 @@
             };
         },
         gethtml(option,parentIndex,activeIndex){
-            console.log("activeIndex=="+activeIndex);
             var str=`<ul class='cascader-ul' >`;
             option.forEach(function(option,index){
                 str+=`<li class='cascader-li ${(typeof(activeIndex)=="undefined"||activeIndex!=index)?"":"active"}' index="${parentIndex==-1?index:parentIndex+"-"+index}">
@@ -60,7 +59,7 @@
             var num=this.data.get("num");
             //num长度不为0，则表示之前选择过。
             if(num.length){
-                console.log(num);
+                console.log("之前选择的菜单数据："+num);
                 var data=this.data.get("options");
                 var html=this.gethtml(data,-1,num[0]);
                 var preix=num[0];
