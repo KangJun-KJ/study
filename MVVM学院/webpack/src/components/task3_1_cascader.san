@@ -1,10 +1,11 @@
 <template>
     <div class='cascader' on-click="toggleClick">
-        <input class='input' value="{{= value =}}" readonly="readonly"/>
+        <input class='input' value="{{= value =}}" placeholder="{{placeholder   }}" readonly="readonly"/>
         <i class="down {{open?'active':''}}"></i>
-        <div s-if="open" s-transition="hook('slide-in-top')">
-            <s-menu     
-             options="{{ options }}"
+        <div s-if="open" s-transition="hook('slide-in-top')" >
+            <s-menu  on-change="change"
+                options="{{ options }}"
+                num="{{ num }}"
             >
             </s-menu>
         </div>
@@ -22,15 +23,32 @@
         initData () {
             return {
                 open:false,
-                value:""
+                value:"",
+                num:[] 
             };
         },
         attached(){
-            console.log(this.data.get("options"))
+           
         },
         toggleClick(){
             this.data.set("open",!this.data.get("open"));
-            console.log(this.data.get("open"))
+        },
+        getText(num){
+            var data=this.data.get("options");
+            var str="";
+            for(var i=0,len=num.length;i<len;i++){
+                str+=data[num[i]].label;
+                data=data[num[i]].children;
+                if(i!=len-1)
+                    str+="/";
+            }
+            return str;
+        },
+        change(num){
+            this.toggleClick();
+            this.data.set("num",num);
+            this.data.set("value",this.getText(num));
+            this.fire("change");
         },
         hook: transition
     }   

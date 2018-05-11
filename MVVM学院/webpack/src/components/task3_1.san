@@ -1,10 +1,17 @@
 <template>
-    <div>
-
-        <cascader
-            options="{{ options }}"
-            on-change="change"
-        ></cascader>   
+    <div class='section'>
+        <!--
+            <back-btn></back-btn>
+            <h1>3.1 用递归的方式实现级联组件</h1>
+        -->
+         <div>
+            <h3> 点击触发子菜单</h3>
+            <cascader
+                options="{{ options }}"
+                on-change="change"
+                placeholder="静静地等待你选择"
+            ></cascader>   
+         </div>
     </div>
 </template>
 
@@ -67,12 +74,15 @@
             attached(){
                 
             },
-            change(vale){
-                console.log(value);
+            change(value){
+                console.log('选择完毕');
             }
         }
 </script>
 
-<style>
-
+<style lang='sass' scoped>
+    .section{
+        width:90%;
+        margin:0 auto;
+    }
 </style>
