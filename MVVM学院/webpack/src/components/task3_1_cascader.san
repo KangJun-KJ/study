@@ -2,14 +2,13 @@
     <div class='cascader' on-click="toggleClick">
         <input class='input' value="{{= value =}}" placeholder="{{placeholder   }}" readonly="readonly"/>
         <i class="down {{open?'active':''}}"></i>
-        <div s-if="open" s-transition="hook('slide-in-top')" >
+        <div s-if="open" s-transition="hook('slide-in-top')" class='cascader-menu'>
             <s-menu  on-change="change"
                 options="{{ options }}"
                 num="{{ num }}"
             >
             </s-menu>
         </div>
-        
     </div>
 </template>
 
@@ -66,7 +65,7 @@
         border-radius:3px;
         transition: border-color .2s cubic-bezier(.645,.045,.355,1);
         .input{
-           position: absolute;
+            position: absolute;
             left: 0;
             top: 0;
             width: 100%;
@@ -101,8 +100,11 @@
         .active{
             transform:rotate(-180deg);
         }
+        .cascader-menu{
+            line-height:0;
+        }
    }
-    .slide-in-top-enter,.slide-in-top-leave{transition:all .5s ;transform-origin:top center;}
-    .slide-in-top-before-enter,.slide-in-top-leave{transform:scaleY(.5);opacity:0}
+    .slide-in-top-enter,.slide-in-top-leave{transition:all .5s ;transform-origin:bottom center;}
+    .slide-in-top-before-enter,.slide-in-top-leave{transform:scaleY(0);opacity:0}
     .slide-in-top-before-leave,.slide-in-top-enter{opacity:1}
 </style>

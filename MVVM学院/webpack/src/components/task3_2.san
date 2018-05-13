@@ -1,0 +1,46 @@
+<template>
+    <div class='section'>
+        <back-btn></back-btn>
+        <h1>3.2日历组件</h1>
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+		<br/>
+        <date-picker>
+        
+        </date-picker> 
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+		<br/>
+    </div>
+</template>
+
+<script>
+    import backBtn from '@/components/backHomeBtn.san'
+    import datePicker from '@/components/task3_2-date_picker'
+
+    export default {
+            components:{
+                "back-btn":backBtn,
+                "date-picker":datePicker
+            },
+            initData () {
+                return {};
+            },
+            attached(){
+                
+            },
+            change(value){
+            }
+        }
+</script>
+
+<style lang='sass' scoped>
+    .section{
+        width:90%;
+        margin:0 auto;
+    }
+</style>
