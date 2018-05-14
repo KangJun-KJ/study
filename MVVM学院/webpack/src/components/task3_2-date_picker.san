@@ -3,8 +3,10 @@
         <div class='date-picker' on-click="toggleClick">
             <input class='input' value="{{= value =}}" placeholder="选择日期" />
             <i class="time"></i>
-             <div s-if="open" s-transition="hook('slide-in-top')" class='date-menu'>
+             <div s-if="open" s-transition="hook('slide-in-top')" class='date-menu' >
                 <s-menu on-init="init"
+                    on-select="select"
+                    time="{{value}}"
                 >
                 </s-menu>
             </div>
@@ -22,12 +24,11 @@
         initData () {
             return {
                 value:"",
-                open:false,
+                open:true,
                 listenScroll:true
             };
         },
         attached(){
-            
         },
         // 打开菜单时候初始化位置
         init(){
@@ -44,7 +45,7 @@
         },
         setElPosition(){
             const el=this.el.getElementsByClassName("date-menu")[0];
-            var eHei=340+10,eWid;
+            var eHei=340+10,eWid=300;
             var r=this.el.getBoundingClientRect();
             if(r.top+eHei<=this.getWinHei()){
                 el.style.top="50px";
@@ -54,11 +55,11 @@
             if(r.left<0){
                 el.style.left="0px";
             }
-            if(r.right+eWid<=this.getWinWid()){
-                el.style.left=Math.max(0,r.left)+"px";
-            }else{
-                el.style.left=Math.min(r.right,this.getWinWid())+"px";
-            }
+            // if(r.right+eWid<=this.getWinWid()){
+            //     el.style.left=Math.max(0,r.left)+"px";
+            // }else{
+            //     el.style.left=Math.min(r.right,this.getWinWid())+"px";
+            // }
         },
         getWinHei(){
             return window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight;
@@ -69,8 +70,9 @@
         toggleClick(){
             this.data.set("open",!this.data.get("open"));
         },
-        change(value){
-            console.log(333);
+        select(time){
+            this.data.set("open",false);
+            this.data.set("value",time);
         },
         hook: transition
     }
@@ -111,7 +113,7 @@
             width:15px;
             height:15px;
             cursor:pointer;
-            background:url(./../assets/arrow.png) no-repeat center;
+            background:url(./../assets/d.png) no-repeat center;
             pointer-events:none;
         }
         .date-menu{

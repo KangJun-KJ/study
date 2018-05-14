@@ -1,19 +1,19 @@
 <template>
-    <div class='datepicker-wrapper'>
+    <div class='datepicker-wrapper' on-click='stop($event)'>
         <div class='datepicker-header'>
-            <button class='datepicker-button-prev'> << </button>
-            <button class='datepicker-button-prev'> < </button>
-            <span class="datepicker-span">2018 年</span>
-            <span class="datepicker-span">5 月</span>
-            <button class='datepicker-button-next'> > </button>
-            <button class='datepicker-button-next'> >> </button>
+            <button class='datepicker-button-prev' on-click='prevYear'> << </button>
+            <button class='datepicker-button-prev' on-click='prevMonth'> < </button>
+            <span class="datepicker-span">{{year}} 年</span>
+            <span s-if="mode==0" on-click="openMonthMenu" class="datepicker-span">{{month + 1}} 月</span>
+            <button class='datepicker-button-next' on-click='nextYear'> >> </button>
+            <button class='datepicker-button-next' on-click='nextMonth'> > </button>
         </div>
         <!-- 
             <div class='datepick-sidebar'>
             </div>
         -->
         <div class='datepicker-body'>
-            <table cellspacing="0" cellspadding="0" class='date-table'>
+            <table s-if="mode==0" cellspacing="0" cellspadding="0" class='date-table'>
                 <tbody>
                     <tr class='week'>
                         <th>日</th>
@@ -24,59 +24,29 @@
                         <th>五</th>
                         <th>六</th>
                     </tr>
-                    <tr class='date'>
-                        <th>1</th>
-                        <th>2</th>
-                        <th>3</th>
-                        <th>4</th>
-                        <th>5</th>
-                        <th>6</th>
-                        <th>7</th>
+                    <tr class='date' s-for="cow,i in num">
+                        <th s-for="item,j in cow" class="{{item.now?'InMonth':''}} " on-click="selectDate(item.time)">{{item.n}}</th>
                     </tr>
-                    <tr class='date'>
-                        <th>1</th>
-                        <th>2</th>
-                        <th>3</th>
-                        <th>4</th>
-                        <th>5</th>
-                        <th>6</th>
-                        <th>7</th>
+                </tbody>
+            </table>
+            <table s-if="mode==2" cellspacing="0" cellspadding="0" class='date-table'>
+                <tbody>
+                    <tr class='week'>
+                        <th>日</th>
+                        <th>一</th>
+                        <th>二</th>
+                        <th>三</th>
+                        <th>四</th>
+                        <th>五</th>
+                        <th>六</th>
                     </tr>
-                    <tr class='date'>
-                        <th>1</th>
-                        <th>2</th>
-                        <th>3</th>
-                        <th>4</th>
-                        <th>5</th>
-                        <th>6</th>
-                        <th>7</th>
-                    </tr>
-                    <tr class='date'>
-                        <th>1</th>
-                        <th>2</th>
-                        <th>3</th>
-                        <th>4</th>
-                        <th>5</th>
-                        <th>6</th>
-                        <th>7</th>
-                    </tr>
-                    <tr class='date'>
-                        <th>1</th>
-                        <th>2</th>
-                        <th>3</th>
-                        <th>4</th>
-                        <th>5</th>
-                        <th>6</th>
-                        <th>7</th>
-                    </tr>
-                    <tr class='date'>
-                        <th>1</th>
-                        <th>2</th>
-                        <th>3</th>
-                        <th>4</th>
-                        <th>5</th>
-                        <th>6</th>
-                        <th>7</th>
+                </tbody>
+            </table>
+            <table s-if="mode==1" cellspacing="0" cellspadding="0" class='month-table'>
+                <tbody>
+                    <tr class='month' s-for="cow,i in monthNum">
+                        <td s-for="item,j in cow" class="{{(i*4+j)==month?'nowMonth':''}} "
+                         on-click="selectMonth(i,j)">{{item}}月</td>
                     </tr>
                 </tbody>
             </table>
@@ -85,12 +55,107 @@
 </template>
 
 <script>
+    import {getNowDate,weekOffirstDay,getMonthTotalDays,getPrevMonth,getNextMonth,getYearByPrevMonth,getYearByNextMonth} from './../utils/date.js'
     export default{
+        initData(){
+            return {
+                year:0,
+                month:0,
+                day:0,
+                num:[[1,2,3,4,5,6,7],[1,2,3,4,5,6,7]],
+                mode:0,//0表示选择日期，1表示选择月份，2表示选择年份
+                monthNum:[["一","二","三","四"],["五","六","七","八"],["九","十","十一","十二"]]
+            }
+        },
         attached(){
-
+            this.fire('init');
+            let time=this.data.get("time");
+            if(time){
+                time=time.split("-");
+                console.log(time);
+                this.data.set("year",parseInt(time[0]));
+                this.data.set("month",parseInt(time[1])-1);
+                this.data.set("day",parseInt(time[2]));
+            }else{
+                const d=getNowDate();
+                this.data.set("year",d.year);
+                this.data.set("month",d.month);
+                this.data.set("day",d.day);
+            }
+            this.setNums();
+        },
+        setNums(){
+            const year=this.data.get("year");
+            const month=this.data.get("month");
+            const day=this.data.get("day");
+            const firstDayWeek=weekOffirstDay(`${year}-${month+1}-${day}`),
+                start=firstDayWeek,
+                end=getMonthTotalDays(year,month)+firstDayWeek,
+                lastMonthDays=getMonthTotalDays(getYearByPrevMonth(year,month),getPrevMonth(month));
+            let cnt=0;
+            let dateNum=[];
+            for(let i=0;i<6;i++){
+                dateNum[i]=[];
+                for(let j=0;j<7;j++){
+                    cnt++;
+                    if(cnt>start&&cnt<=end){
+                        dateNum[i].push({
+                            n:cnt-start,
+                            now:true,
+                            time:`${year}-${month+1}-${cnt-start}`
+                        });
+                    }else if(cnt<=start){
+                        dateNum[i].push({
+                            n:lastMonthDays-start+cnt,
+                            now:false,
+                            time:`${getYearByPrevMonth(year,month)}-${getPrevMonth(month)+1}-${lastMonthDays-start+cnt}`
+                        });
+                    }else if(cnt>end){
+                        dateNum[i].push({
+                            n:cnt-end,
+                            now:false,
+                            time:`${getYearByNextMonth(year,month)}-${getNextMonth(month)+1}-${cnt-end}`
+                        });
+                    }
+                    
+                }
+            }
+            this.data.set("num",dateNum);
         },
         disposed(){
             
+        },
+        selectDate(time){
+            this.fire("select",time);
+        },
+        openMonthMenu(){
+            this.data.set("mode",1);
+        },
+        selectMonth(i,j){
+            this.data.set("month",i*4+j);
+            this.data.set("mode",0);
+            this.setNums();
+        },
+        prevYear(){
+            this.data.set("year",this.data.get("year")-1);
+            this.setNums();
+        },
+        prevMonth(){
+            this.data.set("year",getYearByPrevMonth(this.data.get("year"),this.data.get("month")));
+            this.data.set("month",getPrevMonth(this.data.get("month")));
+            this.setNums();
+        },
+        nextYear(){
+            this.data.set("year",this.data.get("year")+1);
+            this.setNums();
+        },
+        nextMonth(){
+            this.data.set("year",getYearByNextMonth(this.data.get("year"),this.data.get("month")));
+            this.data.set("month",getNextMonth(this.data.get("month")));
+            this.setNums();
+        },
+        stop(e){
+           e.stopPropagation();
         }
     }
 </script>
@@ -98,8 +163,9 @@
 <style lang='sass' >
     .datepicker-wrapper{
         position: absolute;
+        top:0px;
         width: 328px;
-        height: 284px;
+        height: 300px;
         box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
         .datepicker-header{
             line-height:30px;
@@ -160,6 +226,38 @@
                     }
                     .date{
                         font-size:14px;
+                        cursor:pointer;     
+                        th{
+                           color:#c0c4cc;
+                             
+                        }
+                        .InMonth{
+                            color:#333;
+                            &:hover{
+                                color:#409eff;
+                            }
+                        }
+                    }
+                }
+            }
+            .month-table{
+                margin:0 auto;
+                tbody{
+                    tr{
+                        width:50px;
+                        line-height:50px;
+                        td{
+                            padding:15px;
+                            font-size:14px;
+                            cursor:pointer;
+                            color:#606266;
+                            &:hover{
+                                color:#409eff;
+                            }
+                        }
+                        .nowMonth{
+                            color:#409eff;
+                        }
                     }
                 }
             }
