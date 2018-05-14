@@ -13,7 +13,7 @@
 </template>
 
 <script>
-    import menu from '@/components/task3_2_menu'
+    import menu from '@/components/task3_2_date_time'
     import {transition} from 'san-transition'
     export default {
         components:{
@@ -22,19 +22,19 @@
         initData () {
             return {
                 value:"",
-                open:true,
+                open:false,
                 listenScroll:true
             };
         },
         attached(){
             
         },
+        // 打开菜单时候初始化位置
         init(){
             const _this=this;
             this.setElPosition();
             window.onscroll=function(){
                 if(_this.data.get("listenScroll")){
-                    console.log(123)
                     _this.setElPosition();
                 }
             }
@@ -44,15 +44,27 @@
         },
         setElPosition(){
             const el=this.el.getElementsByClassName("date-menu")[0];
+            var eHei=340+10,eWid;
             var r=this.el.getBoundingClientRect();
-            if(r.top+340<=this.getWinHei()){
+            if(r.top+eHei<=this.getWinHei()){
                 el.style.top="50px";
             }else{
                 el.style.top="-350px";
             }
+            if(r.left<0){
+                el.style.left="0px";
+            }
+            if(r.right+eWid<=this.getWinWid()){
+                el.style.left=Math.max(0,r.left)+"px";
+            }else{
+                el.style.left=Math.min(r.right,this.getWinWid())+"px";
+            }
         },
         getWinHei(){
             return window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight;
+        },
+        getWinWid(){
+            return window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth;
         },
         toggleClick(){
             this.data.set("open",!this.data.get("open"));
