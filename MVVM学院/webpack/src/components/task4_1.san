@@ -1,0 +1,173 @@
+<template>
+    <div class='wrap'>
+        <!--
+            <back-btn></back-btn>
+            <h1>4.1 Todo MVC</h1>
+        -->
+        <section class="todoapp">
+            <header class="header">
+                <h1></h1>
+                <input class="new-todo" 
+                autofocus 
+                autocomplete="off" 
+                placeholder="What needs to be done?"
+                value="{= newTodo =}"
+                on-keyup="addTodo">
+                
+            </header>
+            <!--  s-if="todos.length" -->
+            <section class="main"  >
+				<input class="toggle-all" type="checkbox" on-click='selectAll'>
+				<ul class="todo-list">
+					<li s-for="todo,index in filteredTodos" class="todo" 
+                        class="{{todo.completed?'completed':'' }} {{todo==editedTodo?'editing':''}}">
+						<div class="view">
+                            <!--  -->
+							<input class="toggle" type="checkbox" checked="{{todo.completed}}"  on-click='changeTodoStatus(index)'>
+							<label on-dblclick="editTodo($event,todo)">{{ todo.title }}</label>
+							<button class="destroy" on-click="removeTodo(index)"></button>
+						</div><input class="edit" type="text" 
+							value="{= editValue =}" 
+							on-blur="doneEdit(index)"
+                            on-keyup="keyDown($event,index)"
+                        >
+					</li>
+				</ul>
+			</section>
+            <footer class="footer" s-if="todos.length" >
+				<span class="todo-count">
+      				<strong>{{ remaining }}</strong> {{ remaining | pluralize }} left
+   				</span>
+				<ul class="filters">
+					<li s-for="item in status">
+						<a  on-click="changeStatus(item)" class="{{visibility == item?'selected':''}}">{{item}}</a>
+					</li>
+				</ul>
+				<button class="clear-completed" on-click="removeCompleted" s-if="todos.length > remaining">
+      				Clear completed
+    			</button>
+			</footer>
+        </section>
+    </div>
+</template>
+
+<script>
+    const filters = {
+        all: function(todos) {
+            return todos
+        },
+        active: function(todos) {
+            return todos.filter(function(todo) {
+                return !todo.completed
+            })
+        },
+        completed: function(todos) {
+            return todos.filter(function(todo) {
+                return todo.completed
+            })
+        }
+    }
+    import backBtn from '@/components/backHomeBtn.san'
+    export default {
+        components:{
+            "back-btn":backBtn
+        },
+        initData () {
+            return {
+                todos: JSON.parse(localStorage.getItem("san-todos") || '[]'),//
+                newTodo: '',
+                editedTodo: null,
+                editValue:"",
+                visibility: 'all',
+                status:['all','active','completed']
+            };
+        },
+        attached(){
+            // 监听数据的变化 并且设置localStore
+             this.watch('todos', function (value) {
+                 localStorage.setItem("san-todos",JSON.stringify(this.data.get("todos")));
+            });
+        },
+        computed:{
+            filteredTodos(){
+                return filters[this.data.get("visibility")](this.data.get("todos"));
+            },
+            remaining: function() {
+				return filters.active(this.data.get("todos")).length;
+			}
+        },
+        filters:{
+            pluralize(n){
+                return n === 1 ? 'item' : 'items'
+            }
+        },
+        addTodo(e){
+            if(e.keyCode===13){
+                var value=this.data.get("newTodo").trim();
+                if(value){
+                    this.data.push("todos",{title:value,completed:false});
+                    this.data.set("newTodo","");
+                }
+            }
+        },
+        removeTodo(index){
+            this.data.splice("todos",[index,1]);
+        },
+        editTodo(e,todo){
+            this.data.set("editValue",todo.title);
+            this.data.set("editedTodo",todo);
+            setTimeout(()=>{e.target.parentNode.nextSibling.focus();},0);
+        },
+        
+        keyDown(e,index){
+            if(e.keyCode==13){
+                this.doneEdit(index);
+            }else if(e.keyCode==27){
+                this.data.set("editedTodo","");
+            }
+        },
+        removeCompleted: function() {
+            this.data.set("todos",filters.active(this.data.get("todos")));
+        },
+        changeStatus(value){
+            this.data.set("visibility",value);
+        },
+        doneEdit(index){
+            if(!this.data.get("editedTodo")){
+                return ;
+            }
+            var num=this.data.get("todos");
+            num[index].title= this.data.get("editValue");
+            this.data.set("todos",[]);
+            this.data.set("todos",num);
+            this.data.set("editedTodo",null);
+        },
+        //在checkbox上面使用双向绑定的时候,改变一个todo的状态时候，todos未变化。
+        //使用事件来处理单个的数据变化
+        changeTodoStatus(index){
+            var num=this.data.get("todos");
+            num[index].completed=!num[index].completed;
+            this.data.set("todos",[]);
+            this.data.set("todos",num);
+        },
+        selectAll(){
+            console.log(this.data.get("remaining"));
+            console.log(this.data.get("todos").length);
+            var flag=!(this.data.get("remaining")==this.data.get("todos").length);
+            console.log(flag);
+            var num=this.data.get("todos").map(function(value){value.completed=flag;return value; })
+            this.data.set("todos",[]);
+            this.data.set("todos",num);
+        }
+    }
+</script>
+
+<style >
+    /*
+        @import "https://unpkg.com/todomvc-app-css@2.0.6/index.css";
+    */
+    .wrap{
+        padding-top:100px;
+    }
+    
+</style>
