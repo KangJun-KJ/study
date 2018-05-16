@@ -1,47 +1,60 @@
 <template>
     <div class='section'>
         <div class='date-picker' on-click="toggleClick">
-            <input class='input' value="{{= value =}}" placeholder="选择日期" />
+            <input class='input'
+             value="{{= value =}}" 
+            placeholder="选择日期" 
+            disabled="{{disabled}}" />
             <i class="time"></i>
              <div s-if="open" s-transition="hook('slide-in-top')" class='date-menu' >
-                <s-menu on-init="init"
+                <date-menu
+                    s-if="type=='date'"
+                    on-init="init"
                     on-select="select"
                     time="{{value}}"
                 >
-                </s-menu>
+                </date-menu>
+                <date-range-menu  s-if="type=='daterange'">
+                
+                </date-range-menu>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import menu from '@/components/task3_2_date_time'
+    import dateMenu from '@/components/task3_2_date_time'
+    import dateRangeMenu from '@/components/task3_2_dateRange'
     import {transition} from 'san-transition'
     export default {
         components:{
-            "s-menu":menu
+            "date-menu":dateMenu,
+            "date-range-menu":dateRangeMenu
         },
         initData () {
             return {
+                type:"date",
                 value:"",
-                open:true,
+                open:false,
                 listenScroll:true
             };
         },
         attached(){
+            const _this=this;
+            document.addEventListener("click",function(e){
+                _this.select();
+            })
         },
         // 打开菜单时候初始化位置
         init(){
             const _this=this;
             this.setElPosition();
+            this.data.set("listenScroll",true);
             window.onscroll=function(){
                 if(_this.data.get("listenScroll")){
                     _this.setElPosition();
                 }
             }
-        },
-        uninit(){
-             this.data.set("listenScroll",false);
         },
         setElPosition(){
             const el=this.el.getElementsByClassName("date-menu")[0];
@@ -50,7 +63,7 @@
             if(r.top+eHei<=this.getWinHei()){
                 el.style.top="50px";
             }else{
-                el.style.top="-350px";
+                el.style.top="-310px";
             }
             if(r.left<0){
                 el.style.left="0px";
@@ -67,10 +80,13 @@
         getWinWid(){
             return window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth;
         },
-        toggleClick(){
-            this.data.set("open",!this.data.get("open"));
+        toggleClick(e){
+            e.stopPropagation();
+            if(this.data.get("disabled")) return ;
+                this.data.set("open",!this.data.get("open"));
         },
         select(time){
+            this.data.set("listenScroll",false);
             this.data.set("open",false);
             this.data.set("value",time);
         },
@@ -117,7 +133,8 @@
             pointer-events:none;
         }
         .date-menu{
-            position:relative;
+            position:absolute;
+            z-index:11111;
             top:50px;
         }
     }

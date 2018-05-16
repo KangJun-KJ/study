@@ -1,22 +1,30 @@
 <template>
     <div class='section'>
-        <!-- 
         <back-btn></back-btn> 
         <h1>3.2日历组件</h1>
-        -->
-		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-		<br/>
+		<div class='hei'></div>
         <date-picker>
         
         </date-picker> 
-		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-		<br/>
+        <div class='hei'></div>
+        <date-picker 
+            disabled="true">
+        </date-picker> 
+        <div class='hei'></div>
+        
+          <date-picker>
+        
+        </date-picker> 
+
+        <!-- 
+            <date-picker
+                type="daterange">
+        
+            </date-picker>
+        -->
+        
+        <div class='hei'></div>
+        <div class='hei'></div>
     </div>
 </template>
 
@@ -44,5 +52,8 @@
     .section{
         width:90%;
         margin:0 auto;
+    }
+    .hei{
+        height:200px;
     }
 </style>

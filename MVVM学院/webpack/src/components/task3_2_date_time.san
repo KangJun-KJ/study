@@ -1,19 +1,17 @@
 <template>
     <div class='datepicker-wrapper' on-click='stop($event)'>
+        
         <div class='datepicker-header'>
             <button class='datepicker-button-prev' on-click='prevYear'> << </button>
-            <button class='datepicker-button-prev' on-click='prevMonth'> < </button>
-            <span class="datepicker-span">{{year}} 年</span>
+            <button s-if="mode==0" class='datepicker-button-prev' on-click='prevMonth'> < </button>
+            <span on-click="openYearMenu" class="datepicker-span">{{yearText}} </span>
             <span s-if="mode==0" on-click="openMonthMenu" class="datepicker-span">{{month + 1}} 月</span>
             <button class='datepicker-button-next' on-click='nextYear'> >> </button>
-            <button class='datepicker-button-next' on-click='nextMonth'> > </button>
+            <button s-if="mode==0" class='datepicker-button-next' on-click='nextMonth'> > </button>
         </div>
-        <!-- 
-            <div class='datepick-sidebar'>
-            </div>
-        -->
+        
         <div class='datepicker-body'>
-            <table s-if="mode==0" cellspacing="0" cellspadding="0" class='date-table'>
+            <table s-if="mode==0" s-transition="hook('zoom-in')" cellspacing="0" cellspadding="0" class='date-table'>
                 <tbody>
                     <tr class='week'>
                         <th>日</th>
@@ -25,24 +23,34 @@
                         <th>六</th>
                     </tr>
                     <tr class='date' s-for="cow,i in num">
-                        <th s-for="item,j in cow" class="{{item.now?'InMonth':''}} " on-click="selectDate(item.time)">{{item.n}}</th>
+                        <th s-for="item,j in cow" 
+                        class="{{item.now?'InMonth':''}} " 
+                        on-click="selectDate(item.time)"
+                        >{{item.n}}</th>
                     </tr>
                 </tbody>
             </table>
-            <table s-if="mode==2" cellspacing="0" cellspadding="0" class='date-table'>
+            <table s-if="mode==2"  s-transition="hook('zoom-in')" cellspacing="0" cellspadding="0" class='year-table'>
                 <tbody>
-                    <tr class='week'>
-                        <th>日</th>
-                        <th>一</th>
-                        <th>二</th>
-                        <th>三</th>
-                        <th>四</th>
-                        <th>五</th>
-                        <th>六</th>
+                    <tr class='year'>
+                        <td on-click="selectYear(0)">{{startYear}}</td>
+                        <td on-click="selectYear(1)">{{startYear+1}}</td>
+                        <td on-click="selectYear(2)">{{startYear+2}}</td>
+                        <td on-click="selectYear(3)">{{startYear+3}}</td>
+                    </tr>
+                    <tr class='year'>
+                        <td on-click="selectYear(4)">{{startYear+4}}</td>
+                        <td on-click="selectYear(5)">{{startYear+5}}</td>
+                        <td on-click="selectYear(6)">{{startYear+6}}</td>
+                        <td on-click="selectYear(7)">{{startYear+7}}</td>
+                    </tr>
+                    <tr class='year'>
+                        <td on-click="selectYear(8)">{{startYear+8}}</td>
+                        <td on-click="selectYear(9)">{{startYear+9}}</td>
                     </tr>
                 </tbody>
             </table>
-            <table s-if="mode==1" cellspacing="0" cellspadding="0" class='month-table'>
+            <table s-if="mode==1"  s-transition="hook('zoom-in')"  cellspacing="0" cellspadding="0" class='month-table'>
                 <tbody>
                     <tr class='month' s-for="cow,i in monthNum">
                         <td s-for="item,j in cow" class="{{(i*4+j)==month?'nowMonth':''}} "
@@ -56,6 +64,7 @@
 
 <script>
     import {getNowDate,weekOffirstDay,getMonthTotalDays,getPrevMonth,getNextMonth,getYearByPrevMonth,getYearByNextMonth} from './../utils/date.js'
+    import {transition} from 'san-transition'
     export default{
         initData(){
             return {
@@ -64,7 +73,8 @@
                 day:0,
                 num:[[1,2,3,4,5,6,7],[1,2,3,4,5,6,7]],
                 mode:0,//0表示选择日期，1表示选择月份，2表示选择年份
-                monthNum:[["一","二","三","四"],["五","六","七","八"],["九","十","十一","十二"]]
+                monthNum:[["一","二","三","四"],["五","六","七","八"],["九","十","十一","十二"]],
+                startYear:0,//用于选择年份的时候开始年份
             }
         },
         attached(){
@@ -83,6 +93,14 @@
                 this.data.set("day",d.day);
             }
             this.setNums();
+        },
+        computed:{
+           yearText(){
+                const mode=this.data.get("mode");
+                const year=this.data.get("year");
+                const startYear=this.data.get("startYear");
+                return mode==2?startYear+'年 - '+(startYear+9)+'年':year+'年';
+           }
         },
         setNums(){
             const year=this.data.get("year");
@@ -122,13 +140,23 @@
             }
             this.data.set("num",dateNum);
         },
+        detached(){
+        },
         disposed(){
             
         },
         selectDate(time){
             this.fire("select",time);
         },
+        openYearMenu(){
+            this.data.set("startYear",parseInt(this.data.get("year")/10)*10)
+            this.data.set("mode",2);
+        },
         openMonthMenu(){
+            this.data.set("mode",1);
+        },
+        selectYear(i){
+            this.data.set("year",this.data.get("startYear")+i);
             this.data.set("mode",1);
         },
         selectMonth(i,j){
@@ -137,8 +165,13 @@
             this.setNums();
         },
         prevYear(){
-            this.data.set("year",this.data.get("year")-1);
-            this.setNums();
+            if(this.data.get("mode")==2){
+                this.data.set("startYear",this.data.get("startYear")-10);
+            }else{
+                this.data.set("year",this.data.get("year")-1);
+                this.setNums();
+            }
+            
         },
         prevMonth(){
             this.data.set("year",getYearByPrevMonth(this.data.get("year"),this.data.get("month")));
@@ -146,8 +179,13 @@
             this.setNums();
         },
         nextYear(){
-            this.data.set("year",this.data.get("year")+1);
-            this.setNums();
+            if(this.data.get("mode")==2){
+                this.data.set("startYear",this.data.get("startYear")+10);
+            }else{
+                this.data.set("year",this.data.get("year")+1);
+                this.setNums();
+            }
+            
         },
         nextMonth(){
             this.data.set("year",getYearByNextMonth(this.data.get("year"),this.data.get("month")));
@@ -156,7 +194,8 @@
         },
         stop(e){
            e.stopPropagation();
-        }
+        },
+        hook: transition
     }
 </script>
 
@@ -167,6 +206,7 @@
         width: 328px;
         height: 300px;
         box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+        background-color:#FFF;
         .datepicker-header{
             line-height:30px;
             margin:12px;
@@ -203,15 +243,16 @@
         .datepick-sidebar{
             position:absolute;
             top:0px;
-            left:-110px;
+            right:-110px;
             width:110px;
-            height:284px;
-            border-right: 1px solid #e4e4e4;
+            height:300px;
+            box-shadow: 0 -2px 12px 0 rgba(0, 0, 0, 0.1);
+            // background-color:#000;
         }
         .datepicker-body{
             margin:15px;
             .date-table{
-                margin:0 auto;
+                margin-left:5px;
                 tbody{
                     tr{
                         th{
@@ -241,7 +282,7 @@
                 }
             }
             .month-table{
-                margin:0 auto;
+                margin-left:30px;
                 tbody{
                     tr{
                         width:50px;
@@ -261,6 +302,27 @@
                     }
                 }
             }
+            .year-table{
+                margin-left:5px;
+                tbody{
+                    tr{
+                        line-height:50px;
+                        td{
+                            width:70px;
+                            cursor:pointer;
+                            line-height:70px;
+                            text-align:center;
+                            color:#606266;
+                            &:hover{
+                                color:#409eff;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
+    .zoom-in-enter,.zoom-in-leave{transition:all .5s ;position:absolute;}
+    .zoom-in-before-enter,.zoom-in-leave{transform:scale(.3);opacity:0}
+    .zoom-in-before-leave,.zoom-in-enter{opacity:1;}
 </style>
