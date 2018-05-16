@@ -1,15 +1,296 @@
 <template>
-    <div>
-        选择日期范围
+   <div class='datepickerrange-wrapper' on-click='stop($event)'>
+        <div class='pickdate-left'>
+            <div class='pickdate-header'>
+                <button class='datepicker-button-prev' on-click='prevYear'> << </button>
+                <button  class='datepicker-button-prev' on-click='prevMonth'> < </button>
+                <span class="datepicker-span">{{year}} 年 {{month+1}} 月 </span>
+                <!--
+                    <button class='datepicker-button-next' on-click='nextYear'> >> </button>
+                    <button  class='datepicker-button-next' on-click='nextMonth'> > </button>
+                -->
+            </div>
+            <table cellspacing="0" cellspadding="0" class='date-table'>
+                <tbody>
+                    <tr class='week'>
+                        <th>日</th>
+                        <th>一</th>
+                        <th>二</th>
+                        <th>三</th>
+                        <th>四</th>
+                        <th>五</th>
+                        <th>六</th>
+                    </tr>
+                    <tr class='date' s-for="cow,i in num">
+                        <th s-for="item,j in cow" 
+                        class="{{item.now?'InMonth':''}} " 
+                        on-click="selectDate(item.time)"
+                        >
+                        <div>
+                            <span class="{{sOne==item.time?'selected':''}} {{sTwo==item.time?'selected':''}}">{{item.n}}</span>
+                        </div>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class='pickdate-right'>
+            <div class='pickdate-header'>
+                 <!--
+                    <button class='datepicker-button-prev' on-click='prevYear'> << </button>
+                    <button  class='datepicker-button-prev' on-click='prevMonth'> < </button>
+                -->
+                <span class="datepicker-span">{{rYear}} 年 {{rMonth+1}} 月 </span>
+                <button class='datepicker-button-next' on-click='nextYear'> >> </button>
+                <button  class='datepicker-button-next' on-click='nextMonth'> > </button>
+            </div>
+            <table cellspacing="0" cellspadding="0" class='date-table'>
+                <tbody>
+                    <tr class='week'>
+                        <th>日</th>
+                        <th>一</th>
+                        <th>二</th>
+                        <th>三</th>
+                        <th>四</th>
+                        <th>五</th>
+                        <th>六</th>
+                    </tr>
+                    <tr class='date' s-for="cow,i in rNum">
+                        <th s-for="item,j in cow" 
+                        class="{{item.now?'InMonth':''}} " 
+                        on-click="selectDate(item.time)"
+                        >
+                        <div>
+                            <span class="{{sOne==item.time?'selected':''}} {{sTwo==item.time?'selected':''}}">{{item.n}}</span>
+                        </div>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
 <script>
+    import {getNowDate,weekOffirstDay,getMonthTotalDays,getPrevMonth,getNextMonth,getYearByPrevMonth,getYearByNextMonth} from './../utils/date.js'
     export default {
+        initData(){
+            return {
+                // 左边的年月日
+                year:0,
+                month:0,
+                day:0,
+                //右边的年月日
+                rYear:0,
+                rMonth:0,
+                rDay:0,
+                num:[],
+                rNum:[],
+                sOne:"", //选择的第一个日期
+                sTwo:"" //选择的第二个日期
+            }
+        },
+         attached(){
+            this.fire('init');
+            let time=this.data.get("time");
+            if(time.length>1){
+                time=time.split(this.data.get("separator"));
+                this.data.set("year",parseInt(time[0].split("-")[0]));
+                this.data.set("month",parseInt(time[0].split("-")[1]-1));
+                this.data.set("day",parseInt(time[0].split("-")[2]));
+                this.data.set("rYear",parseInt(time[1].split("-")[0]));
+                this.data.set("rMonth",parseInt(time[1].split("-")[1]-1));
+                this.data.set("rDay",parseInt(time[1].split("-")[2]));
+            }else{
+                const d=getNowDate();
+                this.data.set("year",d.year);
+                this.data.set("month",d.month);
+                this.data.set("day",d.day);
+                this.data.set("rYear",d.year);
+                this.data.set("rMonth",d.month+1);
+                this.data.set("rDay",d.day);
+            }
+            this.data.set("num", this.setNums(this.data.get("year"),this.data.get("month"),this.data.get("day")));
+            this.data.set("rNum", this.setNums(this.data.get("rYear"),this.data.get("rMonth"),this.data.get("rDay")));
 
+        },
+        setNums(year,month,day){
+            const firstDayWeek=weekOffirstDay(`${year}-${month+1}-${day}`),
+                start=firstDayWeek,
+                end=getMonthTotalDays(year,month)+firstDayWeek,
+                lastMonthDays=getMonthTotalDays(getYearByPrevMonth(year,month),getPrevMonth(month));
+            let cnt=0;
+            let dateNum=[];
+            for(let i=0;i<6;i++){
+                dateNum[i]=[];
+                for(let j=0;j<7;j++){
+                    cnt++;
+                    if(cnt>start&&cnt<=end){
+                        dateNum[i].push({
+                            n:cnt-start,
+                            now:true,
+                            time:`${year}-${month+1}-${cnt-start}`
+                        });
+                    }else if(cnt<=start){
+                        dateNum[i].push({
+                            n:lastMonthDays-start+cnt,
+                            now:false,
+                            time:`${getYearByPrevMonth(year,month)}-${getPrevMonth(month)+1}-${lastMonthDays-start+cnt}`
+                        });
+                    }else if(cnt>end){
+                        dateNum[i].push({
+                            n:cnt-end,
+                            now:false,
+                            time:`${getYearByNextMonth(year,month)}-${getNextMonth(month)+1}-${cnt-end}`
+                        });
+                    }
+                    
+                }
+            }
+            return dateNum;
+        },
+        prevYear(){
+            this.data.set("year",this.data.get("year")-1);
+            this.data.set("num", this.setNums(this.data.get("year"),this.data.get("month"),this.data.get("day")));
+        },
+        prevMonth(){
+            this.data.set("year",getYearByPrevMonth(this.data.get("year"),this.data.get("month")));
+            this.data.set("month",getPrevMonth(this.data.get("month")));
+            this.data.set("num", this.setNums(this.data.get("year"),this.data.get("month"),this.data.get("day")));
+        },
+        nextYear(){
+            this.data.set("rYear",this.data.get("rYear")+1);
+            this.data.set("rNum", this.setNums(this.data.get("rYear"),this.data.get("rMonth"),this.data.get("rDay")));
+        },
+         nextMonth(){
+            this.data.set("rYear",getYearByNextMonth(this.data.get("rYear"),this.data.get("rMonth")));
+            this.data.set("rMonth",getNextMonth(this.data.get("rMonth")));
+             this.data.set("rNum", this.setNums(this.data.get("rYear"),this.data.get("rMonth"),this.data.get("rDay")));
+        },
+        selectDate(item){
+            if(!this.data.get("sOne")){
+                this.data.set("sOne",item);
+            }else {
+                this.data.set("sTwo",item);
+                if(this.data.get("sOne")>this.data.get("sTwo")){
+                  this.fire("rangeselect",{s:this.data.get("sTwo"),e:this.data.get("sOne")});
+                }else{
+                    this.fire("rangeselect",{s:this.data.get("sOne"),e:this.data.get("sTwo")});
+                }
+            }
+        },
+        stop(e){
+            e.stopPropagation();
+        }
     }
 </script>
 
-<style>
+<style lang='sass' >
+    .datepickerrange-wrapper{
+        position: absolute;
+        top:0px;
+        background-color:#fff;
+        min-width:640px;
+        height:330px;
 
+        .pickdate-left,
+        .pickdate-right{
+            float:left;
+            width:50%;
+            padding:15px;
+             box-sizing:border-box;
+            .pickdate-header{
+                 text-align:center;
+                 line-height:30px;
+                .datepicker-span{
+                     padding:0 5px;
+                    color:#111;
+                    cursor:pointer;
+                    font-size:18px;
+                }
+                .datepicker-button-prev,
+                .datepicker-button-next{
+                    padding: 0 5px;
+                    line-height:30px;
+                    background:#FFF;
+                    border:none;
+                    cursor:pointer;
+                    outline:none;
+                    &:hover{
+                        color:#409eff;
+                    }
+                }
+                .datepicker-button-prev{
+                    float:left;
+                    margin-left:15px;
+                }
+                .datepicker-button-next{
+                    float:right;
+                    margin-right:15px;
+                }
+            }
+            .date-table{
+                margin-left:5px;
+                tbody{
+                    tr{
+                        height:40px;
+                        th{
+                            position:relative;
+                            line-height:30px;
+                            padding:0 12px;
+                            color: #606266;
+                            font-weight: 400;
+                            div{
+                                height: 30px;
+                                padding: 3px 0;
+                                box-sizing: border-box;
+                             span{
+                                width: 24px;
+                                height: 24px;
+                                display: block;
+                                margin: 0 auto;
+                                line-height: 24px;
+                                position: absolute;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                border-radius: 50%;
+                             }
+                             
+                            }
+                           
+                        }
+                    }
+                    .week{
+                        th{
+                            border-bottom: 1px solid #ebeef5;
+                        }
+                    }
+                    .date{
+                        font-size:14px;
+                        cursor:pointer;     
+                        th{
+                           color:#c0c4cc;
+                        }
+                        .InMonth{
+                            color:#666;
+                            .selected{
+                                 color:#fff;
+                                    background-color: #409eff;
+                            }
+                            &:hover{
+                                color:#409eff;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .pickdate-left{
+            border-right: 1px solid #e4e4e4;
+           
+        }
+        .pickdate-right{
+           
+        }
+    }
 </style>

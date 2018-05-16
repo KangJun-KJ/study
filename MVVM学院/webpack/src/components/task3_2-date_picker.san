@@ -1,6 +1,6 @@
 <template>
     <div class='section'>
-        <div class='date-picker' on-click="toggleClick">
+        <div class='date-picker' on-click="toggleClick"  s-if="type=='date'">
             <input class='input'
              value="{{= value =}}" 
             placeholder="选择日期" 
@@ -8,16 +8,35 @@
             <i class="time"></i>
              <div s-if="open" s-transition="hook('slide-in-top')" class='date-menu' >
                 <date-menu
-                    s-if="type=='date'"
                     on-init="init"
                     on-select="select"
                     time="{{value}}"
                 >
                 </date-menu>
-                <date-range-menu  s-if="type=='daterange'">
+               
+            </div>
+        </div>
+        <div class='date-picker-range'  on-click="toggleClick" s-if="type=='daterange'">
+            <input class='input'
+                value="{{= startTime =}}" 
+                 placeholder="开始日期" 
+                 />
+            <span>{{separator}}</span>
+             <input class='input'
+                value="{{= endTime =}}" 
+                 placeholder="结束日期" 
+                />
+             <i class="time"></i>
+             <div s-if="open" s-transition="hook('slide-in-top')" class='date-menu' >
+             <date-range-menu  
+                    time="{{startTime}}{{separator}}{{endTime}}"
+                    separator="{{separator}}"
+                    on-rangeselect="rangeselect"
+                    >
                 
                 </date-range-menu>
             </div>
+             
         </div>
     </div>
 </template>
@@ -36,7 +55,10 @@
                 type:"date",
                 value:"",
                 open:false,
-                listenScroll:true
+                listenScroll:true,
+                startTime:"",
+                endTime:"",
+                separator:"至"
             };
         },
         attached(){
@@ -90,6 +112,12 @@
             this.data.set("open",false);
             this.data.set("value",time);
         },
+        rangeselect(time){
+            this.data.set("listenScroll",false);
+            this.data.set("open",false);
+            this.data.set("startTime",time.s);
+            this.data.set("endTime",time.e);
+        },
         hook: transition
     }
 </script>
@@ -116,6 +144,50 @@
             box-sizing: border-box;
             color: #606266;
             border: 1px solid #dcdfe6;
+            transition:border-color .3s ease;
+            &:focus{
+                outline: none;
+                border-color: #409eff;
+            }
+        }
+        .time{
+            position:absolute;
+            top:13px;
+            left:10px;
+            width:15px;
+            height:15px;
+            cursor:pointer;
+            background:url(./../assets/d.png) no-repeat center;
+            pointer-events:none;
+        }
+        .date-menu{
+            position:absolute;
+            z-index:11111;
+            top:50px;
+        }
+    }
+    .date-picker-range{
+        position:relative;
+        width:350px;
+        height:40px;    
+        border: 1px solid #dcdfe6;
+        background-color:#FFF;
+        .input{
+            width: 40%;
+            margin-left:5%;
+            height: 100%;
+               box-sizing: border-box;
+            padding: 0 30px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            cursor: pointer;
+            outline:none;
+            border:none;
+            text-align: left;
+            font-size: inherit;
+            box-sizing: border-box;
+            color: #606266;
             transition:border-color .3s ease;
             &:focus{
                 outline: none;

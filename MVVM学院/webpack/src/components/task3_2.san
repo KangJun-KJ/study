@@ -3,7 +3,7 @@
         <back-btn></back-btn> 
         <h1>3.2日历组件</h1>
 		<div class='hei'></div>
-        <date-picker>
+        <date-picker  type="daterange">
         
         </date-picker> 
         <div class='hei'></div>

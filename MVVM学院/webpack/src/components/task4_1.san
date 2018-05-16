@@ -1,10 +1,8 @@
 <template>
     <div class='wrap'>
-        <!--
-            <back-btn></back-btn>
-            <h1>4.1 Todo MVC</h1>
-        -->
-        <section class="todoapp">
+        <back-btn></back-btn>
+        <h1>4.1 Todo MVC</h1>
+        <section class="todoapp ">
             <header class="header">
                 <h1></h1>
                 <input class="new-todo" 
@@ -151,11 +149,11 @@
             this.data.set("todos",num);
         },
         selectAll(){
-            console.log(this.data.get("remaining"));
-            console.log(this.data.get("todos").length);
-            var flag=!(this.data.get("remaining")==this.data.get("todos").length);
-            console.log(flag);
-            var num=this.data.get("todos").map(function(value){value.completed=flag;return value; })
+            var flag=!(this.data.get("remaining")==0);
+            var num=this.data.get("todos");
+            for(let i=0,len=num.length;i<len;i++){
+                num[i].completed=flag;
+            }   
             this.data.set("todos",[]);
             this.data.set("todos",num);
         }
