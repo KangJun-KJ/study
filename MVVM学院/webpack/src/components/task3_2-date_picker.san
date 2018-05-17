@@ -11,10 +11,11 @@
                     on-init="init"
                     on-select="select"
                     time="{{value}}"
+                    options="{{options}}"
                 >
                 </date-menu>
-               
             </div>
+            <i class='clearTime' s-if="value" on-click='clearTime'></i>
         </div>
         <div class='date-picker-range'  on-click="toggleClick" s-if="type=='daterange'">
             <input class='input'
@@ -27,13 +28,14 @@
                  placeholder="结束日期" 
                 />
              <i class="time"></i>
-             <div s-if="open" s-transition="hook('slide-in-top')" class='date-menu' >
-             <date-range-menu  
+             <i class='clearTime' s-if="startTime && endTime" on-click='clearTime'></i>
+                <div s-if="open" s-transition="hook('slide-in-top')" class='date-menu' >
+                <date-range-menu 
+                    on-init="init" 
                     time="{{startTime}}{{separator}}{{endTime}}"
                     separator="{{separator}}"
                     on-rangeselect="rangeselect"
-                    >
-                
+                >
                 </date-range-menu>
             </div>
              
@@ -52,44 +54,58 @@
         },
         initData () {
             return {
-                type:"date",
-                value:"",
-                open:false,
-                listenScroll:true,
-                startTime:"",
-                endTime:"",
-                separator:"至"
+                type:"date",//显示时间的类型
+                value:"",//选中时间的值
+                open:false,//用来判断是否打开时间菜单
+                startTime:"",//范围时间段开始时间
+                endTime:"",//范围时间结束时间
+                separator:"至",//范围时间的分隔符
+                clickMe:true //用来记录点击的是不是时间框本身,从而达到点击空白关闭效果
             };
         },
         attached(){
             const _this=this;
-            document.addEventListener("click",function(e){
-                _this.select();
-            })
+            if(!this.data.get("disabled")){
+                document.addEventListener("click",function(e){
+                    if(!_this.data.get("clickMe")){
+                        _this.select(_this.data.get("value"));
+                    }
+                    _this.data.set("clickMe",false);
+                })
+               
+            }
         },
         // 打开菜单时候初始化位置
         init(){
             const _this=this;
             this.setElPosition();
-            this.data.set("listenScroll",true);
             window.onscroll=function(){
-                if(_this.data.get("listenScroll")){
+                if(_this.data.get("open")){
                     _this.setElPosition();
                 }
             }
         },
+        clearTime(e){
+            e.stopPropagation();
+            this.data.set("value","");
+            this.data.set("startTime","");
+            this.data.set("endTime","");
+        },
         setElPosition(){
-            const el=this.el.getElementsByClassName("date-menu")[0];
-            var eHei=340+10,eWid=300;
-            var r=this.el.getBoundingClientRect();
-            if(r.top+eHei<=this.getWinHei()){
-                el.style.top="50px";
+            const el=this.el.getElementsByClassName("date-menu")[0].childNodes[1];
+            var eHei=getComputedStyle(el).height,eWid=getComputedStyle(el).width;
+            console.log(eWid+' ' +eHei);
+            var r=el.getBoundingClientRect();
+            console.log(r.bottom+r.height);
+            console.log(this.getWinHei());
+            if(r.bottom+r.height<=this.getWinHei()){
+                el.style.top="10px";
             }else{
-                el.style.top="-310px";
+                el.style.top=-r.height-50-10+"px";
             }
-            if(r.left<0){
-                el.style.left="0px";
-            }
+            // if(r.left<0){
+            //     el.style.left="0px";
+            // }
             // if(r.right+eWid<=this.getWinWid()){
             //     el.style.left=Math.max(0,r.left)+"px";
             // }else{
@@ -103,17 +119,15 @@
             return window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth;
         },
         toggleClick(e){
-            e.stopPropagation();
             if(this.data.get("disabled")) return ;
-                this.data.set("open",!this.data.get("open"));
+            this.data.set("open",!this.data.get("open"));
+            this.data.set("clickMe",true);
         },
         select(time){
-            this.data.set("listenScroll",false);
             this.data.set("open",false);
             this.data.set("value",time);
         },
         rangeselect(time){
-            this.data.set("listenScroll",false);
             this.data.set("open",false);
             this.data.set("startTime",time.s);
             this.data.set("endTime",time.e);
@@ -160,6 +174,15 @@
             background:url(./../assets/d.png) no-repeat center;
             pointer-events:none;
         }
+        .clearTime{
+            position:absolute;
+            top:13px;
+            right:10px;
+            width:15px;
+            height:15px;
+            cursor:pointer;
+            background:url(./../assets/delete.png) no-repeat center;
+        }
         .date-menu{
             position:absolute;
             z-index:11111;
@@ -203,6 +226,15 @@
             cursor:pointer;
             background:url(./../assets/d.png) no-repeat center;
             pointer-events:none;
+        }
+        .clearTime{
+            position:absolute;
+            top:13px;
+            right:10px;
+            width:15px;
+            height:15px;
+            cursor:pointer;
+            background:url(./../assets/delete.png) no-repeat center;
         }
         .date-menu{
             position:absolute;

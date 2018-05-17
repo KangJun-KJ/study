@@ -2,13 +2,11 @@
    <div class='datepickerrange-wrapper' on-click='stop($event)'>
         <div class='pickdate-left'>
             <div class='pickdate-header'>
-                <button class='datepicker-button-prev' on-click='prevYear'> << </button>
-                <button  class='datepicker-button-prev' on-click='prevMonth'> < </button>
+                <button class='datepicker-button-prev' on-click='LprevYear'> << </button>
+                <button  class='datepicker-button-prev' on-click='LprevMonth'> < </button>
                 <span class="datepicker-span">{{year}} 年 {{month+1}} 月 </span>
-                <!--
-                    <button class='datepicker-button-next' on-click='nextYear'> >> </button>
-                    <button  class='datepicker-button-next' on-click='nextMonth'> > </button>
-                -->
+                <button class='datepicker-button-next {{(year+1>rYear || (year+1==rYear && month>=rMonth))?"disabled":""}}' on-click='LnextYear' > >> </button>
+                <button  class='datepicker-button-next {{(year>=rYear && month+1>=rMonth)?"disabled":""}}' on-click='LnextMonth'> > </button>
             </div>
             <table cellspacing="0" cellspadding="0" class='date-table'>
                 <tbody>
@@ -36,13 +34,11 @@
         </div>
         <div class='pickdate-right'>
             <div class='pickdate-header'>
-                 <!--
-                    <button class='datepicker-button-prev' on-click='prevYear'> << </button>
-                    <button  class='datepicker-button-prev' on-click='prevMonth'> < </button>
-                -->
+                <button class='datepicker-button-prev {{(rYear-1<year || (rYear-1 == year && month>=rMonth))?"disabled":""}}' on-click='RprevYear'> << </button>
+                <button  class='datepicker-button-prev {{(rYear<=year && rMonth-1<=month)?"disabled":""}}' on-click='RprevMonth'> < </button>
                 <span class="datepicker-span">{{rYear}} 年 {{rMonth+1}} 月 </span>
-                <button class='datepicker-button-next' on-click='nextYear'> >> </button>
-                <button  class='datepicker-button-next' on-click='nextMonth'> > </button>
+                <button class='datepicker-button-next' on-click='RnextYear'> >> </button>
+                <button  class='datepicker-button-next' on-click='RnextMonth'> > </button>
             </div>
             <table cellspacing="0" cellspadding="0" class='date-table'>
                 <tbody>
@@ -57,10 +53,10 @@
                     </tr>
                     <tr class='date' s-for="cow,i in rNum">
                         <th s-for="item,j in cow" 
-                        class="{{item.now?'InMonth':''}} " 
+                        class="{{item.now?'InMonth':''}}" 
                         on-click="selectDate(item.time)"
                         >
-                        <div>
+                        <div  >
                             <span class="{{sOne==item.time?'selected':''}} {{sTwo==item.time?'selected':''}}">{{item.n}}</span>
                         </div>
                         </th>
@@ -95,12 +91,15 @@
             let time=this.data.get("time");
             if(time.length>1){
                 time=time.split(this.data.get("separator"));
+                console.log(time);
                 this.data.set("year",parseInt(time[0].split("-")[0]));
                 this.data.set("month",parseInt(time[0].split("-")[1]-1));
                 this.data.set("day",parseInt(time[0].split("-")[2]));
                 this.data.set("rYear",parseInt(time[1].split("-")[0]));
                 this.data.set("rMonth",parseInt(time[1].split("-")[1]-1));
                 this.data.set("rDay",parseInt(time[1].split("-")[2]));
+                this.data.set("sOne",time[0]);
+                this.data.set("sTwo",time[1]);
             }else{
                 const d=getNowDate();
                 this.data.set("year",d.year);
@@ -149,34 +148,76 @@
             }
             return dateNum;
         },
-        prevYear(){
+        LprevYear(){
             this.data.set("year",this.data.get("year")-1);
             this.data.set("num", this.setNums(this.data.get("year"),this.data.get("month"),this.data.get("day")));
         },
-        prevMonth(){
+        LprevMonth(){
             this.data.set("year",getYearByPrevMonth(this.data.get("year"),this.data.get("month")));
             this.data.set("month",getPrevMonth(this.data.get("month")));
             this.data.set("num", this.setNums(this.data.get("year"),this.data.get("month"),this.data.get("day")));
         },
-        nextYear(){
+        LnextYear(){
+            const lYear=this.data.get("year"),rYear=this.data.get("rYear");
+            const lMonth=this.data.get("month"),rMonth=this.data.get("rMonth");
+            if(lYear+1>rYear || (lYear+1==rYear && lMonth>=rMonth)){
+                return ;
+            }
+            this.data.set("year",this.data.get("year")+1);
+            this.data.set("num", this.setNums(this.data.get("year"),this.data.get("month"),this.data.get("day")));
+        },
+        LnextMonth(){
+            const lYear=this.data.get("year"),rYear=this.data.get("rYear");
+            const lMonth=this.data.get("month"),rMonth=this.data.get("rMonth");
+            if(lYear>=rYear && lMonth+1>=rMonth){
+                return ;
+            }
+            this.data.set("year",getYearByNextMonth(this.data.get("year"),this.data.get("month")));
+            this.data.set("month",getNextMonth(this.data.get("month")));
+            this.data.set("num", this.setNums(this.data.get("year"),this.data.get("month"),this.data.get("day")));
+        },
+        RprevYear(){
+             const lYear=this.data.get("year"),rYear=this.data.get("rYear");
+             const lMonth=this.data.get("month"),rMonth=this.data.get("rMonth");
+             if(rYear-1<lYear || (rYear-1 == lYear && lMonth>=rMonth)){
+                 return ;
+             }
+            this.data.set("rYear",this.data.get("rYear")-1);
+            this.data.set("rNum", this.setNums(this.data.get("rYear"),this.data.get("rMonth"),this.data.get("rDay")));
+        },
+        RprevMonth(){
+            const lYear=this.data.get("year"),rYear=this.data.get("rYear");
+            const lMonth=this.data.get("month"),rMonth=this.data.get("rMonth");
+            if(rYear<=lYear && rMonth-1<=lMonth){
+                alert(1);
+                return ;
+            }
+            this.data.set("rYear",getYearByPrevMonth(this.data.get("rYear"),this.data.get("rMonth")));
+            this.data.set("rMonth",getPrevMonth(this.data.get("rMonth")));
+            this.data.set("rNum", this.setNums(this.data.get("rYear"),this.data.get("rMonth"),this.data.get("rDay")));
+        },
+        RnextYear(){
             this.data.set("rYear",this.data.get("rYear")+1);
             this.data.set("rNum", this.setNums(this.data.get("rYear"),this.data.get("rMonth"),this.data.get("rDay")));
         },
-         nextMonth(){
+        RnextMonth(){
             this.data.set("rYear",getYearByNextMonth(this.data.get("rYear"),this.data.get("rMonth")));
             this.data.set("rMonth",getNextMonth(this.data.get("rMonth")));
-             this.data.set("rNum", this.setNums(this.data.get("rYear"),this.data.get("rMonth"),this.data.get("rDay")));
+            this.data.set("rNum", this.setNums(this.data.get("rYear"),this.data.get("rMonth"),this.data.get("rDay")));
         },
         selectDate(item){
             if(!this.data.get("sOne")){
                 this.data.set("sOne",item);
-            }else {
+            }else if(!this.data.get("sTwo")){
                 this.data.set("sTwo",item);
                 if(this.data.get("sOne")>this.data.get("sTwo")){
                   this.fire("rangeselect",{s:this.data.get("sTwo"),e:this.data.get("sOne")});
                 }else{
                     this.fire("rangeselect",{s:this.data.get("sOne"),e:this.data.get("sTwo")});
                 }
+            }else{
+               this.data.set("sOne",item);
+               this.data.set("sTwo","");
             }
         },
         stop(e){
@@ -186,6 +227,13 @@
 </script>
 
 <style lang='sass' >
+    .disabled{
+        color: #bbb;
+        cursor: not-allowed!important;
+    }
+    .in-range{
+        background-color:#f2f6fc;
+    }
     .datepickerrange-wrapper{
         position: absolute;
         top:0px;
@@ -208,6 +256,7 @@
                     cursor:pointer;
                     font-size:18px;
                 }
+                
                 .datepicker-button-prev,
                 .datepicker-button-next{
                     padding: 0 5px;

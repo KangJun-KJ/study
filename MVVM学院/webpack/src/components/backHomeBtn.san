@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class='btn-group'>
         <button class='ripple' on-click='backhome'>返回</button>
         <button class='ripple' on-click='goCode'>查看代码</button>
     </div>
@@ -23,6 +23,9 @@
 </script>
 
 <style lang='sass' scoped>
+    .btn-group{
+        margin-bottom:30px;
+    }
     button{
         line-height:30px;
         text-align:center;

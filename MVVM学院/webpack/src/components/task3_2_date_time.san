@@ -1,5 +1,5 @@
 <template>
-    <div class='datepicker-wrapper' on-click='stop($event)'>
+    <div class='datepicker-wrapper {{options.shortcuts?"hasBar":""}}' on-click='stop($event)'>
         
         <div class='datepicker-header'>
             <button class='datepicker-button-prev' on-click='prevYear'> << </button>
@@ -9,7 +9,11 @@
             <button class='datepicker-button-next' on-click='nextYear'> >> </button>
             <button s-if="mode==0" class='datepicker-button-next' on-click='nextMonth'> > </button>
         </div>
-        
+        <div class='datepick-sidebar' s-if="options.shortcuts">
+            <button s-for="item in options.shortcuts" on-click="selectslideop(item.time)">
+                {{item.text}}
+            </button>
+        </div>
         <div class='datepicker-body'>
             <table s-if="mode==0" s-transition="hook('zoom-in')" cellspacing="0" cellspadding="0" class='date-table'>
                 <tbody>
@@ -32,22 +36,12 @@
             </table>
             <table s-if="mode==2"  s-transition="hook('zoom-in')" cellspacing="0" cellspadding="0" class='year-table'>
                 <tbody>
-                    <tr class='year'>
-                        <td on-click="selectYear(0)">{{startYear}}</td>
-                        <td on-click="selectYear(1)">{{startYear+1}}</td>
-                        <td on-click="selectYear(2)">{{startYear+2}}</td>
-                        <td on-click="selectYear(3)">{{startYear+3}}</td>
+                    <tr class='year' s-for="cow,i in yearNum">
+                        <td s-for="item,j in cow" 
+                         on-click="selectYear(i*4+j)">{{startYear + (i*4+j)}}</td>
                     </tr>
-                    <tr class='year'>
-                        <td on-click="selectYear(4)">{{startYear+4}}</td>
-                        <td on-click="selectYear(5)">{{startYear+5}}</td>
-                        <td on-click="selectYear(6)">{{startYear+6}}</td>
-                        <td on-click="selectYear(7)">{{startYear+7}}</td>
-                    </tr>
-                    <tr class='year'>
-                        <td on-click="selectYear(8)">{{startYear+8}}</td>
-                        <td on-click="selectYear(9)">{{startYear+9}}</td>
-                    </tr>
+
+                   
                 </tbody>
             </table>
             <table s-if="mode==1"  s-transition="hook('zoom-in')"  cellspacing="0" cellspadding="0" class='month-table'>
@@ -68,12 +62,13 @@
     export default{
         initData(){
             return {
-                year:0,
-                month:0,
-                day:0,
+                year:0,//当前选中的年份
+                month:0,//当前选中的月份
+                day:0,//当前选中的哪一天
                 num:[[1,2,3,4,5,6,7],[1,2,3,4,5,6,7]],
                 mode:0,//0表示选择日期，1表示选择月份，2表示选择年份
-                monthNum:[["一","二","三","四"],["五","六","七","八"],["九","十","十一","十二"]],
+                monthNum:[["一","二","三","四"],["五","六","七","八"],["九","十","十一","十二"]],//月份菜单数组
+                yearNum:[[1,2,3,4],[5,6,7,8],[9,10]],//年份菜单数组
                 startYear:0,//用于选择年份的时候开始年份
             }
         },
@@ -82,7 +77,6 @@
             let time=this.data.get("time");
             if(time){
                 time=time.split("-");
-                console.log(time);
                 this.data.set("year",parseInt(time[0]));
                 this.data.set("month",parseInt(time[1])-1);
                 this.data.set("day",parseInt(time[2]));
@@ -145,6 +139,9 @@
         disposed(){
             
         },
+        selectslideop(d){
+           this.fire("select",`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`);
+        },
         selectDate(time){
             this.fire("select",time);
         },
@@ -200,6 +197,9 @@
 </script>
 
 <style lang='sass' >
+    .hasBar{
+        padding-left:110px;
+    }
     .datepicker-wrapper{
         position: absolute;
         top:0px;
@@ -243,11 +243,26 @@
         .datepick-sidebar{
             position:absolute;
             top:0px;
-            right:-110px;
+            left:0px;
             width:110px;
             height:300px;
-            box-shadow: 0 -2px 12px 0 rgba(0, 0, 0, 0.1);
-            // background-color:#000;
+            background-color:#FFF;
+            border-right: 1px solid #e4e4e4;
+            button{
+                display:block;
+                padding:3px 6px 3px 12px;
+                width:100%;
+                border:0;
+                line-height:28px;
+                font-size:14px;
+                text-align:left;
+                color:#606266;
+                outline:none;
+                cursor:pointer;
+                &:hover{
+                     color:#409eff;
+                }
+            }
         }
         .datepicker-body{
             margin:15px;

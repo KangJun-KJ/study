@@ -2,6 +2,8 @@
     <div class='wrap'>
         <back-btn></back-btn>
         <h1>4.1 Todo MVC</h1>
+
+        <a target="_blank" href='https://cn.vuejs.org/v2/examples/todomvc.html'>借鉴vueTodoMVC</a>
         <section class="todoapp ">
             <header class="header">
                 <h1></h1>
@@ -13,7 +15,6 @@
                 on-keyup="addTodo">
                 
             </header>
-            <!--  s-if="todos.length" -->
             <section class="main"  >
 				<input class="toggle-all" type="checkbox" on-click='selectAll'>
 				<ul class="todo-list">
@@ -164,8 +165,8 @@
     /*
         @import "https://unpkg.com/todomvc-app-css@2.0.6/index.css";
     */
-    .wrap{
-        padding-top:100px;
+    .todoapp{
+        margin-top:100px;
     }
     
 </style>
