@@ -34,6 +34,7 @@
                     on-init="init" 
                     time="{{startTime}}{{separator}}{{endTime}}"
                     separator="{{separator}}"
+                    options="{{options}}"
                     on-rangeselect="rangeselect"
                 >
                 </date-range-menu>
@@ -92,14 +93,21 @@
             this.data.set("endTime","");
         },
         setElPosition(){
-            const el=this.el.getElementsByClassName("date-menu")[0].childNodes[1];
-            var eHei=getComputedStyle(el).height,eWid=getComputedStyle(el).width;
-            var r=el.getBoundingClientRect();
-            if(r.bottom+r.height<=this.getWinHei()){
-                el.style.top="10px";
-            }else{
-                el.style.top=-r.height-50-10+"px";
-            }
+            const _this=this;
+            clearTimeout(this.timer);
+            this.timer=setTimeout(function(){
+                const el=_this.el.getElementsByClassName("date-menu")[0].childNodes[1];
+                var eHei=parseInt(getComputedStyle(el).height),eWid=parseInt(getComputedStyle(el).width);
+                var r=_this.el.getElementsByClassName("date-menu")[0].getBoundingClientRect();
+                console.log(_this.getWinHei());
+                if(r.top+eHei   <=_this.getWinHei()+30){
+                    console.log(r.top+"==="+eHei);
+                    el.style.top="10px";
+                }else{
+                    console.log(r.top+"==="+eHei);
+                    el.style.top=-eHei-50-10+"px";
+                }
+            },10)
         },
         getWinHei(){
             return window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight;

@@ -1,5 +1,5 @@
 <template>
-   <div class='datepickerrange-wrapper' on-click='stop($event)'>
+   <div class='datepickerrange-wrapper {{options.shortcuts?"hasBar":""}}' on-click='stop($event)'>
         <div class='pickdate-left'>
             <div class='pickdate-header'>
                 <button class='datepicker-button-prev' on-click='LprevYear'> << </button>
@@ -7,6 +7,11 @@
                 <span class="datepicker-span">{{year}} 年 {{month+1}} 月 </span>
                 <button class='datepicker-button-next {{(year+1>rYear || (year+1==rYear && month>=rMonth))?"disabled":""}}' on-click='LnextYear' > >> </button>
                 <button  class='datepicker-button-next {{(year>=rYear && month+1>=rMonth)?"disabled":""}}' on-click='LnextMonth'> > </button>
+            </div>
+            <div class='datepick-sidebar' s-if="options.shortcuts">
+                <button s-for="item in options.shortcuts" on-click="selectslideop(item.time)">
+                    {{item.text}}
+                </button>
             </div>
             <table cellspacing="0" cellspadding="0" class='date-table'>
                 <tbody>
@@ -19,13 +24,17 @@
                         <th>五</th>
                         <th>六</th>
                     </tr>
+                    <!-- 这样判断两个日期之间的时间有问题，想到解决方法前补0.{{(item.time>=sOne&&item.time<=sTwo) ?'in-range':''}}-->
                     <tr class='date' s-for="cow,i in num">
                         <th s-for="item,j in cow" 
-                        class="{{item.now?'InMonth':''}} " 
+                        class="{{item.now?'InMonth':''}}" 
                         on-click="selectDate(item.time)"
                         >
                         <div>
-                            <span class="{{sOne==item.time?'selected':''}} {{sTwo==item.time?'selected':''}}">{{item.n}}</span>
+                            <span class="{{sOne==item.time?'selected':''}} {{sTwo==item.time?'selected':''}}">
+                            
+                            {{item.n}}
+                            </span>
                         </div>
                         </th>
                     </tr>
@@ -276,6 +285,30 @@
                 .datepicker-button-next{
                     float:right;
                     margin-right:15px;
+                }
+            }
+            .datepick-sidebar{
+                position:absolute;
+                top:0px;
+                left:0px;
+                width:110px;
+                height:300px;
+                background-color:#FFF;
+                border-right: 1px solid #e4e4e4;
+                button{
+                    display:block;
+                    padding:3px 6px 3px 12px;
+                    width:100%;
+                    border:0;
+                    line-height:28px;
+                    font-size:14px;
+                    text-align:left;
+                    color:#606266;
+                    outline:none;
+                    cursor:pointer;
+                    &:hover{
+                        color:#409eff;
+                    }
                 }
             }
             .date-table{

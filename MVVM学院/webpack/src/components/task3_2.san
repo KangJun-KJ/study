@@ -26,15 +26,21 @@
            type="daterange">
         
         </date-picker> 
-
-        <!-- 
-            <date-picker
-                type="daterange">
-        
-            </date-picker>
-        -->
-        
         <div class='hei'></div>
+            
+        <h3>范围的</h3>
+        <date-picker
+           type="daterange">
+        
+        </date-picker> 
+        <div class='hei'></div>
+        <h3>范围的快捷键的</h3>
+        <date-picker
+           type="daterange"
+            options="{{pickerOptions2}}">
+        
+        </date-picker> 
+        
         <div class='hei'></div>
     </div>
 </template>
@@ -64,6 +70,19 @@
                             text: '一月前',
                              time:new Date(new Date().getTime() - 3600 * 1000 * 24 * 30)
                         }]
+                    },
+                    pickerOptions2:{
+                        shortcuts:[{
+                            text:"最近一周",
+                            time:[new Date(),new Date(new Date().getTime() - 3600 * 1000 * 24 * 7)]
+                        },{
+                            text:"最近一个月",
+                            time:[new Date(),new Date(new Date().getTime() - 3600 * 1000 * 24 * 30)]
+                        },{
+                            text:"最近三个月",
+                            time:[new Date(),new Date(new Date().getTime() - 3600 * 1000 * 24 * 90)]
+                        }]
+
                     }
                 };
             },
