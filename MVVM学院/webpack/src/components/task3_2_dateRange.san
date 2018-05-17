@@ -229,6 +229,9 @@
                this.data.set("sTwo","");
             }
         },
+        selectslideop(d){
+           this.fire("rangeselect",{e:`${d[0].getFullYear()}-${d[0].getMonth()+1}-${d[0].getDate()}`,s:`${d[1].getFullYear()}-${d[1].getMonth()+1}-${d[1].getDate()}`});
+        },
         stop(e){
             e.stopPropagation();
         }

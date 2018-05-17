@@ -27,13 +27,7 @@
         
         </date-picker> 
         <div class='hei'></div>
-            
-        <h3>范围的</h3>
-        <date-picker
-           type="daterange">
         
-        </date-picker> 
-        <div class='hei'></div>
         <h3>范围的快捷键的</h3>
         <date-picker
            type="daterange"
