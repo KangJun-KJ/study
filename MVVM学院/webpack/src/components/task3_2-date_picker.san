@@ -94,23 +94,12 @@
         setElPosition(){
             const el=this.el.getElementsByClassName("date-menu")[0].childNodes[1];
             var eHei=getComputedStyle(el).height,eWid=getComputedStyle(el).width;
-            console.log(eWid+' ' +eHei);
             var r=el.getBoundingClientRect();
-            console.log(r.bottom+r.height);
-            console.log(this.getWinHei());
             if(r.bottom+r.height<=this.getWinHei()){
                 el.style.top="10px";
             }else{
                 el.style.top=-r.height-50-10+"px";
             }
-            // if(r.left<0){
-            //     el.style.left="0px";
-            // }
-            // if(r.right+eWid<=this.getWinWid()){
-            //     el.style.left=Math.max(0,r.left)+"px";
-            // }else{
-            //     el.style.left=Math.min(r.right,this.getWinWid())+"px";
-            // }
         },
         getWinHei(){
             return window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight;
